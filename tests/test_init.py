@@ -14,7 +14,8 @@ def test_empty_brackets():
         f('{}')
 
 def test_number_into_brackets():
-    assert str(f('{123}')) == f'{123}'
+    assert f('{123}') == f'{123}'
+    assert f('{123}') != f'{124}'
 
 def test_string_into_brackets():
     assert f('{"kek"}') == f'{"kek"}'

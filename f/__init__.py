@@ -1,7 +1,6 @@
 import sys
 import inspect
 from string import Formatter
-from functools import wraps
 
 
 class ChainUnit:
@@ -13,7 +12,7 @@ class ChainUnit:
                 raise SyntaxError('lazy f-string: empty expression not allowed')
 
 
-class LazyString:
+class LazyString(str):
     def __init__(self, units, local_locals, local_globals, lazy):
         self.units = units
         self.local_locals = local_locals
@@ -42,6 +41,20 @@ class LazyString:
             raise TypeError('can only concatenate str (not "{0}") to str'.format(type(other).__name__))
 
         return other + self.get()
+
+    def __contains__(self, other):
+        if isinstance(other, type(self)):
+            other = other.get()
+        return self.get().__contains__(other)
+
+    def __new__(cls, *args, **kwargs):
+        return str.__new__(cls)
+
+    def __len__(self):
+        return self.get().__len__()
+
+    def __getitem__(self, key):
+        return self.get().__getitem__(key)
 
     def get(self):
         if self.result is not None:
@@ -82,6 +95,9 @@ class ProxyModule(sys.modules[__name__].__class__):
         )
 
     def __str__(self):
+        return 'f'
+
+    def __repr__(self):
         return 'f'
 
 sys.modules[__name__].__class__ = ProxyModule

@@ -105,3 +105,20 @@ def test_lazyness_affect():
 
 def test_str_f():
     assert str(f) == 'f'
+
+
+def test_repr_f():
+    assert repr(f) == 'f'
+
+
+def test_isinstance_str():
+    assert isinstance(f('kek'), str)
+
+
+def test_read_nonlocal_variable():
+    kek = 5
+
+    def function():
+        return f('{kek}')
+
+    assert function() == 'kek'

@@ -38,7 +38,10 @@ class LazyString:
     def __radd__(self, other):
         if isinstance(other, type(self)):
             other = other.get()
-        return self.get().__radd__(other)
+        if not isinstance(other, str):
+            raise TypeError('can only concatenate str (not "{0}") to str'.format(type(other).__name__))
+
+        return other + self.get()
 
     def get(self):
         if self.result is not None:
@@ -77,5 +80,8 @@ class ProxyModule(sys.modules[__name__].__class__):
             {**inspect.stack(0)[1].frame.f_globals},
             lazy,
         )
+
+    def __str__(self):
+        return 'f'
 
 sys.modules[__name__].__class__ = ProxyModule

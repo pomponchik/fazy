@@ -25,7 +25,7 @@ def test_dunder_eq():
     assert lazy_string != 'no kek'
 
 
-def test_dunder_add():
+def test_dunder_add_and_radd():
     assert f('lol') + f('kek') == f('lolkek')
     assert f('lol') + f('kek') == 'lolkek'
     assert f('lol') + 'kek' == 'lolkek'
@@ -35,4 +35,10 @@ def test_dunder_add():
 
     assert f('lol') + f('kek') != f('not lolkek')
 
-    f('lol') + 5
+    with pytest.raises(TypeError):
+        f('lol') + 5
+
+    try:
+        f('lol') + 5
+    except TypeError as e:
+        assert str(e) == 'can only concatenate str (not "int") to str'

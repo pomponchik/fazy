@@ -101,3 +101,7 @@ def test_lazyness_affect():
     changeable.append(4)
 
     assert not_lazy_string != lazy_string
+
+
+def test_str_f():
+    assert str(f) == 'f'

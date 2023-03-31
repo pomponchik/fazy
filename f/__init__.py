@@ -80,17 +80,21 @@ class ProxyModule(sys.modules[__name__].__class__):
         )
 
     def sum_of_nonlocals(self, first_frame):
+        #print(inspect.getframeinfo(first_frame))
         if first_frame is None:
             return {}
 
         all_locals = []
         while first_frame is not None:
+            #code = first_frame.f_code
+            #print(dir(code))
             all_locals.append(first_frame.f_locals)
             first_frame = first_frame.f_back
 
         result = {}
         index = len(all_locals) - 1
 
+        #all_locals.reverse()
         while index >= 0:
             result.update(all_locals[index])
             index -= 1

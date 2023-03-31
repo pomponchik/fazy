@@ -1,6 +1,7 @@
 import sys
 import inspect
 from string import Formatter
+from collections import UserString
 
 
 class ChainUnit:
@@ -12,51 +13,33 @@ class ChainUnit:
                 raise SyntaxError('lazy f-string: empty expression not allowed')
 
 
-class LazyString(str):
-    def __init__(self, units, local_locals, local_globals, lazy):
+class LazyString(UserString, str):
+    def __init__(self, units, local_locals, local_globals, local_nonlocals, lazy):
         self.units = units
         self.local_locals = local_locals
         self.local_globals = local_globals
+        self.local_nonlocals = local_nonlocals
         self.lazy = lazy
         self.result = None
-
-    def __str__(self):
-        return str(self.get())
-
-    def __repr__(self):
-        return repr(self.get())
-
-    def __eq__(self, other):
-        return self.get().__eq__(other)
-
-    def __add__(self, other):
-        if isinstance(other, type(self)):
-            other = other.get()
-        return self.get().__add__(other)
-
-    def __radd__(self, other):
-        if isinstance(other, type(self)):
-            other = other.get()
-        if not isinstance(other, str):
-            raise TypeError('can only concatenate str (not "{0}") to str'.format(type(other).__name__))
-
-        return other + self.get()
-
-    def __contains__(self, other):
-        if isinstance(other, type(self)):
-            other = other.get()
-        return self.get().__contains__(other)
 
     def __new__(cls, *args, **kwargs):
         return str.__new__(cls)
 
-    def __len__(self):
-        return self.get().__len__()
+    def __add__(self, other):
+        if isinstance(other, type(self)):
+            other = other.data
+        return self.data.__add__(other)
 
-    def __getitem__(self, key):
-        return self.get().__getitem__(key)
+    def __radd__(self, other):
+        if isinstance(other, type(self)):
+            other = other.data
+        if not isinstance(other, str):
+            raise TypeError('can only concatenate str (not "{0}") to str'.format(type(other).__name__))
 
-    def get(self):
+        return other + self.data
+
+    @property
+    def data(self):
         if self.result is not None:
             return self.result
 
@@ -67,6 +50,7 @@ class LazyString(str):
             if unit.appendix is not None:
                 substring = 'x = {0}'.format(unit.appendix)
                 namespace = self.local_globals.copy()
+                namespace.update(self.local_nonlocals)
                 namespace.update(self.local_locals)
                 try:
                     exec(substring, namespace)
@@ -91,8 +75,27 @@ class ProxyModule(sys.modules[__name__].__class__):
             [ChainUnit(base=x[0], appendix=x[1], lazy=lazy) for x in Formatter().parse(string)],
             {**inspect.stack(0)[1].frame.f_locals},
             {**inspect.stack(0)[1].frame.f_globals},
+            self.sum_of_nonlocals(inspect.stack(0)[1].frame.f_back),
             lazy,
         )
+
+    def sum_of_nonlocals(self, first_frame):
+        if first_frame is None:
+            return {}
+
+        all_locals = []
+        while first_frame is not None:
+            all_locals.append(first_frame.f_locals)
+            first_frame = first_frame.f_back
+
+        result = {}
+        index = len(all_locals) - 1
+
+        while index >= 0:
+            result.update(all_locals[index])
+            index -= 1
+
+        return result
 
     def __str__(self):
         return 'f'

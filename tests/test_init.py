@@ -121,4 +121,38 @@ def test_read_nonlocal_variable():
     def function():
         return f('{kek}')
 
-    assert function() == 'kek'
+    assert function() == '{0}'.format(kek)
+
+
+def test_read_nonlocal_variable_difficult():
+    kek = 5
+
+    def function_2():
+        return f('{kek}')
+
+    def function():
+        return function_2()
+
+    assert function() == '{0}'.format(kek)
+
+
+def test_read_nonlocal_variable_nested():
+    kek = 5
+
+    def function_2():
+        return f('{kek}')
+
+    def function():
+        kek = 3
+        return function_2()
+
+    assert function() == '{0}'.format(3)
+
+    def function_2():
+        return '{0}'.format(kek)
+
+    def function():
+        kek = 3
+        return function_2()
+
+    assert function() == '{0}'.format(3)

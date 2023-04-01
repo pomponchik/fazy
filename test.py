@@ -1,16 +1,26 @@
-from collections import UserString
+import inspect
+import sys
+import gc
 
 
-class MyString(UserString, str):
-    def __init__(self, sec):
-        self.sec = sec
+def function():
+    print(dir(inspect.stack(0)[0].frame.f_code))
+    print('co_qualname' in dir(inspect.stack(0)[0].frame.f_code))
+    print(inspect.getmembers(inspect.stack(0)[0].frame))
+    print()
+    print()
+    print()
+    print(inspect.stack(0))
+    print(dir(sys._getframe(0).f_code))
+    print('co_qualname' in dir(sys._getframe(0).f_code))
+    print()
+    print()
+    print()
+    print(inspect.stack(0)[0].frame.f_code.co_cellvars)
 
-    def __new__(cls, *args, **kwargs):
-        return str.__new__(cls)
+    for func in gc.get_referrers(inspect.stack(0)[0].frame.f_code):
+        print(func)
 
-    @property
-    def data(self):
-        return self.sec
+l = [function]
 
-
-assert MyString('lol kek') not in 'kek'
+function()

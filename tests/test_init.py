@@ -146,8 +146,9 @@ def test_read_nonlocal_variable_nested():
         kek = 3
         return function_2()
 
-    assert function() == '{0}'.format(3)
+    assert function() == '{0}'.format(5)
 
+    # comparing with original interpreter behavior:
     def function_2():
         return '{0}'.format(kek)
 
@@ -155,4 +156,14 @@ def test_read_nonlocal_variable_nested():
         kek = 3
         return function_2()
 
-    assert function() == '{0}'.format(3)
+    assert function() == '{0}'.format(5)
+
+
+def test_builtins():
+    assert f('{print}') == '{0}'.format(print)
+
+
+def test_modules_startswith():
+    assert f.startswith('12345', '123')
+    assert f.startswith([1, 2, 3, 4, 5], [1, 2, 3])
+    assert not f.startswith([1, 2, 3, 4, 5], [1, 2, 4])

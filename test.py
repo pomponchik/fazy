@@ -18,9 +18,6 @@ def function():
     print()
     print(inspect.stack(0)[0].frame.f_code.co_cellvars)
 
-    for func in gc.get_referrers(inspect.stack(0)[0].frame.f_code):
-        print(func)
-
 l = [function]
 
 function()

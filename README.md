@@ -1,3 +1,3 @@
-# lazy_fstrings
+[![Supports Python versions 2.7 and 3.5+, including PyPy](https://img.shields.io/pypi/pyversions/fazy.svg)](https://pypi.python.org/pypi/fazy)
 
-Работают ли нонлокалы?
+# FAZY: lazy f-strings for everyone

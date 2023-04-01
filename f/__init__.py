@@ -1,6 +1,8 @@
 import gc
 import sys
 import inspect
+import builtins
+from functools import wraps
 from string import Formatter
 from collections import UserString
 
@@ -67,6 +69,8 @@ class LazyString(UserString, str):
 
 
 class ProxyModule(sys.modules[__name__].__class__):
+    old_str = str
+
     def __call__(self, string, lazy=True):
         if not lazy:
             raise NotImplementedError('Only lazy mode is allowed.')
@@ -78,6 +82,20 @@ class ProxyModule(sys.modules[__name__].__class__):
             self.sum_of_nonlocals(inspect.stack(0)[1].frame.f_back, self.get_qualname(inspect.stack(0)[1].frame.f_code)),
             lazy,
         )
+
+    @staticmethod
+    def hack_str(flag):
+        if not isinstance(flag, bool):
+            raise ValueError('A flag must be a boolean, not {0}.'.format(type(flag).__name__))
+        if not flag:
+            builtins.str = ProxyModule.old_str
+        else:
+            class NewStr(str):
+                def __contains__(self, other):
+                    if isinstance(other, LazyString):
+                        other = other.get()
+                    return super().__contains__(other)
+            builtins.str = NewStr
 
     def sum_of_nonlocals(self, first_frame, base_qualname):
         if first_frame is None:
@@ -135,3 +153,5 @@ class ProxyModule(sys.modules[__name__].__class__):
 
 
 sys.modules[__name__].__class__ = ProxyModule
+
+ProxyModule.hack_str(True)

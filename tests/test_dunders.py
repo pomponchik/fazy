@@ -59,9 +59,6 @@ def test_dunder_contains():
 def test_dunder_contains_reverce():
     assert f('l') in 'lol'
     assert f('lol') in 'lol'
-
-    assert 'lolkek' not in 'lol'
-
     assert f('lolkek') not in 'lol'
 
 

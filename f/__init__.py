@@ -40,6 +40,12 @@ class LazyString(UserString, str):
 
         return other + self.data
 
+    def __getitem__(self, index):
+        return self.data.__getitem__(index)
+
+    def __getnewargs__(self):
+        return (self.units, self.local_locals, self.local_globals, self.local_nonlocals, self.lazy)
+
     @property
     def data(self):
         if self.result is not None:

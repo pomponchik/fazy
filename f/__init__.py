@@ -46,6 +46,25 @@ class LazyString(UserString, str):
     def __getnewargs__(self):
         return (self.units, self.local_locals, self.local_globals, self.local_nonlocals, self.lazy)
 
+    def __mod__(self, args):
+        if isinstance(args, type(self)):
+            args = args.data
+        return self.data.__mod__(args)
+
+    def __rmod__(self, template):
+        return str(template) % self.data
+
+    def __mul__(self, n):
+        return self.data * n
+
+    def __ne__(self, other):
+        if isinstance(other, type(self)):
+            other = other.data
+        return self.data != other
+
+    #def __reduce__(self):
+    #    raise TypeError('cannot pickle {0} object'.format(type(self).__name__))
+
     @property
     def data(self):
         if self.result is not None:

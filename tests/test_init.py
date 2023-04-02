@@ -1,3 +1,9 @@
+import os
+import pickle
+from io import StringIO
+from contextlib import redirect_stdout
+from tempfile import TemporaryDirectory
+
 import pytest
 
 import f
@@ -167,3 +173,24 @@ def test_modules_startswith():
     assert f.startswith('12345', '123')
     assert f.startswith([1, 2, 3, 4, 5], [1, 2, 3])
     assert not f.startswith([1, 2, 3, 4, 5], [1, 2, 4])
+
+
+def test_print():
+    with redirect_stdout(StringIO()) as context:
+        print(f('kek'))
+
+    assert context.getvalue() == 'kek\n'
+
+
+def test_write_and_read_file():
+    with TemporaryDirectory() as directory:
+        full_path = os.path.join(directory, 'file.txt')
+        with open(full_path, 'w') as file:
+            file.write(f('kek'))
+        with open(full_path, 'r') as file:
+            assert file.read() == 'kek'
+
+
+def test_pickle():
+    representation = pickle.dumps(f('kek'))
+    assert pickle.loads(representation) == 'kek'

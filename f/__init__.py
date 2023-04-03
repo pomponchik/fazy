@@ -62,8 +62,8 @@ class LazyString(UserString, str):
             other = other.data
         return self.data != other
 
-    #def __reduce__(self):
-    #    raise TypeError('cannot pickle {0} object'.format(type(self).__name__))
+    def __reduce__(self):
+        raise TypeError('cannot pickle {0} object'.format(type(self).__name__))
 
     @property
     def data(self):

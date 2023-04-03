@@ -189,8 +189,3 @@ def test_write_and_read_file():
             file.write(f('kek'))
         with open(full_path, 'r') as file:
             assert file.read() == 'kek'
-
-
-def test_pickle():
-    representation = pickle.dumps(f('kek'))
-    assert pickle.loads(representation) == 'kek'

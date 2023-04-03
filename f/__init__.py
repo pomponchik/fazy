@@ -65,6 +65,27 @@ class LazyString(UserString, str):
     def __reduce__(self):
         raise TypeError('cannot pickle {0} object'.format(type(self).__name__))
 
+    def replace(self, old, new, maxsplit=-1):
+        if isinstance(old, type(self)):
+            old = old.data
+        if isinstance(new, type(self)):
+            new = new.data
+        return self.data.replace(old, new, maxsplit)
+
+    def split(self, sep=None, maxsplit=-1):
+        if isinstance(sep, type(self)):
+            sep = sep.data
+        return self.data.split(sep, maxsplit)
+
+    def lower(self):
+        return self.data.lower()
+
+    def upper(self):
+        return self.data.upper()
+
+    def zfill(self, width):
+        return self.data.zfill(width)
+
     @property
     def data(self):
         if self.result is not None:
@@ -98,6 +119,9 @@ class ProxyModule(sys.modules[__name__].__class__):
     def __call__(self, string, lazy=True):
         if not lazy:
             raise NotImplementedError('Only lazy mode is allowed.')
+
+        if isinstance(string, LazyString):
+            string = string.data
 
         return LazyString(
             [ChainUnit(base=x[0], appendix=x[1], lazy=lazy) for x in Formatter().parse(string)],

@@ -1,7 +1,124 @@
+import sys
+
+import pytest
+
 import f
 
 
-def test_converting_to_bytes():
-    assert isinstance(str.encode(f('kek')), bytes)
-    assert str.encode(f('kek')) == b'kek'
-    assert str.encode(f('')) == b''
+def test_encode():
+    assert isinstance(f('kek').encode(), bytes)
+    assert f('kek').encode() == b'kek'
+    assert f('').encode() == b''
+    assert f('{123}').encode() == b'123'
+
+
+def test_replace():
+    assert f('kek').replace('k', 'f') == 'fef'
+    assert f('kek').replace(f('k'), 'f') == 'fef'
+    assert f('kek').replace('k', f('f')) == 'fef'
+    assert f('kek').replace(f('k'), f('f')) == 'fef'
+
+    assert f('kek').replace('k', 'f') == f('fef')
+    assert f('kek').replace(f('k'), 'f') == f('fef')
+    assert f('kek').replace('k', f('f')) == f('fef')
+    assert f('kek').replace(f('k'), f('f')) == f('fef')
+
+
+def test_split():
+    assert f('kek').split('e') == ['k', 'k']
+    assert f('kek').split(f('e')) == ['k', 'k']
+    assert f('k k').split() == ['k', 'k']
+
+
+def test_find():
+    # str references
+    assert 'kek'.find('k') == 0
+    assert 'kek'.find('e') == 1
+    assert 'kek'.find('p') == -1
+
+    assert f('kek').find('k') == 0
+    assert f('kek').find(f('k')) == 0
+
+    assert f('kek').find('e') == 1
+    assert f('kek').find(f('e')) == 1
+
+    assert f('kek').find('p') == -1
+    assert f('kek').find(f('p')) == -1
+
+    with pytest.raises(TypeError):
+        f('kek').find(0)
+
+
+def test_index():
+    # str references
+    assert 'kek'.index('k') == 0
+    assert 'kek'.index('e') == 1
+    with pytest.raises(ValueError):
+        'kek'.index('p') == -1
+
+    assert f('kek').index('k') == 0
+    assert f('kek').index(f('k')) == 0
+
+    assert f('kek').index('e') == 1
+    assert f('kek').index(f('e')) == 1
+
+    with pytest.raises(ValueError):
+        f('kek').index('p')
+    with pytest.raises(ValueError):
+        f('kek').index(f('p'))
+    with pytest.raises(TypeError):
+        f('kek').index(0)
+
+
+@pytest.mark.skipif(sys.version_info < (3, 7), reason='Requires python3.7, look at documentation: https://docs.python.org/3/library/stdtypes.html#str.isascii')
+def test_isascii():
+    assert f('kek').isascii() == True
+    assert f('кек').isascii() == False
+
+
+def test_isupper():
+    assert f('BANANA').isupper()
+    assert not f('banana').isupper()
+    assert not f('baNana').isupper()
+    assert not f(' ').isupper()
+    assert not f('').isupper()
+
+
+def test_islower():
+    assert not f('BANANA').islower()
+    assert f('banana').islower()
+    assert not f('baNana').islower()
+    assert not f(' ').islower()
+    assert not f('').islower()
+
+
+def test_upper():
+    assert f('BANANA').upper() == 'BANANA'
+    assert f('banana').upper() == 'BANANA'
+    assert f('baNana').upper() == 'BANANA'
+    assert f('').upper() == ''
+    assert f(' ').upper() == ' '
+
+
+def test_lower():
+    assert f('BANANA').lower() == 'banana'
+    assert f('banana').lower() == 'banana'
+    assert f('baNana').lower() == 'banana'
+    assert f('').lower() == ''
+    assert f(' ').lower() == ' '
+
+
+def test_zfill():
+    assert f('42').zfill(5) == '00042'
+    assert f('-42').zfill(5) == '-0042'
+    assert f('').zfill(5) == '00000'
+
+
+def test_count():
+    assert f('aaa').count('a') == 3
+    assert f('kkk').count('a') == 0
+    assert f('kkk').count('') == 4
+
+    assert f('aaa').count(f('a')) == 3
+    assert f('kkk').count(f('a')) == 0
+    assert f('kkk').count(f('')) == 4

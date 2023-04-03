@@ -2,7 +2,7 @@ import pytest
 
 import f
 
-['__rmul__', '__setattr__', '__sizeof__', '__subclasshook__', 'capitalize', 'casefold', 'center', 'count', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'format_map', 'index', 'isalnum', 'isalpha', 'isascii', 'isdecimal', 'isdigit', 'isidentifier', 'islower', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
+['__rmul__', '__setattr__', '__sizeof__', '__subclasshook__', 'capitalize', 'casefold', 'center', 'count', 'endswith', 'expandtabs', 'format', 'format_map', 'isalnum', 'isalpha', 'isdecimal', 'isdigit', 'isidentifier', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'join', 'ljust', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate']
 
 def test_dunder_str():
     lazy_string = f('kek')
@@ -21,11 +21,17 @@ def test_dunder_repr():
 def test_dunder_eq():
     lazy_string = f('kek')
 
+    assert lazy_string == lazy_string
+    assert f('kek') == f('kek')
+
     assert lazy_string == 'kek'
     assert lazy_string != 'no kek'
 
     assert 'kek' == lazy_string
     assert 'no kek' != lazy_string
+
+    assert f('e') == 'e'
+    assert 'e' == f('e')
 
 
 def test_dunder_add_and_radd():
@@ -214,6 +220,7 @@ def test_dunder_mul():
 
 
 def test_dunder_reduce():
+    # an str reference
     with pytest.raises(TypeError):
         'kek'.__reduce__()
     with pytest.raises(TypeError):

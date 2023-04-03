@@ -1,7 +1,8 @@
-import f
+from collections import UserString
 
 
-f.hack_str = True
+class MyString(UserString):
+    pass
 
-print(f('lolkek'))
-assert f('lolkek') not in 'lol'
+
+assert MyString('lol kek').split() == ['lol', 'kek']

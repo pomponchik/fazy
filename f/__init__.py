@@ -86,6 +86,17 @@ class LazyString(UserString, str):
     def zfill(self, width):
         return self.data.zfill(width)
 
+    def translate(self, *args):
+        return self.data.translate(*args)
+
+    def title(self):
+        return self.data.title()
+
+    def endswith(self, suffix, *other_args):
+        if isinstance(suffix, type(self)):
+            suffix = suffix.data
+        return self.data.endswith(suffix, *other_args)
+
     @property
     def data(self):
         if self.result is not None:

@@ -48,6 +48,13 @@ def test_find_reverse():
     assert 'kek'.find(f('p')) == -1
 
 
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_endswith_reverse():
+    assert 'kek'.endswith(f('ek'))
+    assert 'kek'.endswith(f(''))
+    assert not 'kek'.endswith(f('pe'))
+
+
 @pytest.mark.skip(reason='In MVP i won\'t do it.')
 def test_pickle():
     representation = pickle.dumps(f('kek'))

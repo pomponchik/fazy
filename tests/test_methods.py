@@ -122,3 +122,49 @@ def test_count():
     assert f('aaa').count(f('a')) == 3
     assert f('kkk').count(f('a')) == 0
     assert f('kkk').count(f('')) == 4
+
+
+def test_translate():
+    # an str reference
+    assert 'aaa'.translate({97: 98}) == 'bbb'
+
+    assert f('aaa').translate({97: 98}) == 'bbb'
+
+
+def test_title():
+    # str references
+    assert 'kek'.title() == 'Kek'
+    assert 'lol kek'.title() == 'Lol Kek'
+
+    assert f('kek').title() == 'Kek'
+    assert f('lol kek').title() == 'Lol Kek'
+
+
+def test_format():
+    assert f('kek').format() == 'kek'
+    assert '{0}'.format(f('kek')) == 'kek'
+
+
+def test_endswith():
+    # str references
+    assert 'kek'.endswith('ek')
+    assert 'kek'.endswith('')
+    assert not 'kek'.endswith('pe')
+
+    assert f('kek').endswith('ek')
+    assert f('kek').endswith('')
+    assert not f('kek').endswith('pe')
+
+    assert f('kek').endswith(f('ek'))
+    assert f('kek').endswith(f(''))
+    assert not f('kek').endswith(f('pe'))
+
+
+def test_isdigit():
+    assert f('888').isdigit()
+    assert f('0').isdigit()
+    assert f('0001').isdigit()
+    assert not f('8.0').isdigit()
+    assert not f('-8').isdigit()
+    assert not f('kek').isdigit()
+    assert not f('09 kek').isdigit()

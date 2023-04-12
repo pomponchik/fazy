@@ -186,3 +186,8 @@ def test_print():
 def test_recursive():
     assert f(f('kek')) == f('kek')
     assert f(f('kek')) == 'kek'
+
+
+def test_lazy_mode_is_not_implemented():
+    with pytest.raises(NotImplementedError):
+        f('kek', lazy=False)

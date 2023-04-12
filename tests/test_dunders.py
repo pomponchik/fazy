@@ -4,7 +4,7 @@ import pytest
 
 import f
 
-['casefold', 'expandtabs', 'format_map', 'isidentifier', 'istitle', 'ljust', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'splitlines', 'swapcase']
+['format_map', 'istitle', 'ljust', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'splitlines', 'swapcase']
 
 def test_dunder_str():
     lazy_string = f('kek')

@@ -128,6 +128,12 @@ class LazyString(UserString, str):
     def encode(self, **kwargs):
         return self.data.encode(**kwargs)
 
+    def casefold(self):
+        return self.data.casefold()
+
+    def expandtabs(self, tabsize=8):
+        return self.data.expandtabs(tabsize)
+
     @property
     def data(self):
         if self.result is not None:

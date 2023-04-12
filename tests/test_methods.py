@@ -181,6 +181,18 @@ def test_isprintable():
     assert not f('\n').isprintable()
 
 
+def test_isidentifier():
+    assert f('kek').isidentifier()
+    assert f('kek8').isidentifier()
+    assert f('lol_kek').isidentifier()
+    assert f('lol_kek_8').isidentifier()
+    assert not f('').isidentifier()
+    assert not f(' ').isidentifier()
+    assert not f('\n').isidentifier()
+    assert not f('\nkek').isidentifier()
+    assert not f('lol-kek-8').isidentifier()
+
+
 def test_upper():
     assert f('BANANA').upper() == 'BANANA'
     assert f('banana').upper() == 'BANANA'
@@ -304,3 +316,15 @@ def test_capitalize():
 
     assert f('').capitalize() == ''
     assert f('kek').capitalize() == 'Kek'
+
+
+def test_casefold():
+    assert f('').casefold() == ''
+    assert f('ß').casefold() == 'ss'
+    assert f('KEK').casefold() == 'kek'
+
+
+def test_expandtabs():
+    assert f('01\t012\t0123\t01234').expandtabs() == '01\t012\t0123\t01234'.expandtabs()
+    assert f('01\t012\t0123\t01234').expandtabs(4) == '01\t012\t0123\t01234'.expandtabs(4)
+    assert f('').expandtabs(4) == ''.expandtabs(4)

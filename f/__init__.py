@@ -130,6 +130,9 @@ class LazyString(UserString, str):
     def capitalize(self):
         return self.data.capitalize()
 
+    def encode(self, **kwargs):
+        return self.data.encode(**kwargs)
+
     @property
     def data(self):
         if self.result is not None:

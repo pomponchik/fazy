@@ -35,9 +35,6 @@ class LazyString(UserString, str):
         return self.data.__add__(other)
 
     def __radd__(self, other):
-        if not isinstance(other, str):
-            raise TypeError('can only concatenate str (not "{0}") to str'.format(type(other).__name__))
-
         return other + self.data
 
     def __getitem__(self, index):

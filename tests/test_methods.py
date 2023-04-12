@@ -92,6 +92,95 @@ def test_islower():
     assert not f('').islower()
 
 
+def test_isalnum():
+    # str references
+    assert 'kek'.isalnum()
+    assert 'kek55'.isalnum()
+    assert '55'.isalnum()
+    assert not ''.isalnum()
+    assert not 'kek55 lol 66'.isalnum()
+
+    assert f('kek').isalnum()
+    assert f('kek55').isalnum()
+    assert f('55').isalnum()
+    assert not f('').isalnum()
+    assert not f('kek55 lol 66').isalnum()
+
+
+def test_isalpha():
+    # str references
+    assert 'kek'.isalpha()
+    assert 'Kek'.isalpha()
+    assert not ''.isalpha()
+    assert not '*'.isalpha()
+    assert not ' '.isalpha()
+    assert not '55'.isalpha()
+
+    assert f('kek').isalpha()
+    assert f('Kek').isalpha()
+    assert not f('').isalpha()
+    assert not f('*').isalpha()
+    assert not f(' ').isalpha()
+    assert not f('55').isalpha()
+
+
+def test_isdecimal():
+    # str references
+    assert '0'.isdecimal()
+    assert '55'.isdecimal()
+    assert not '-55'.isdecimal()
+    assert not ''.isdecimal()
+    assert not 'kek'.isdecimal()
+    assert not '1A'.isdecimal()
+
+    assert f('0').isdecimal()
+    assert f('55').isdecimal()
+    assert not f('-55').isdecimal()
+    assert not f('').isdecimal()
+    assert not f('kek').isdecimal()
+    assert not f('1A').isdecimal()
+
+
+def test_isnumeric():
+    # str references
+    assert '0'.isnumeric()
+    assert '55'.isnumeric()
+    assert not '-55'.isnumeric()
+    assert not ''.isnumeric()
+    assert not 'kek'.isnumeric()
+    assert not '1A'.isnumeric()
+
+    assert '\u0030'.isnumeric()
+    assert '\u00B2'.isnumeric()
+
+    assert f('0').isnumeric()
+    assert f('55').isnumeric()
+    assert not f('-55').isnumeric()
+    assert not f('').isnumeric()
+    assert not f('kek').isnumeric()
+    assert not f('1A').isnumeric()
+
+    assert f('\u0030').isnumeric()
+    assert f('\u00B2').isnumeric()
+
+
+def test_isspace():
+    assert f(' ').isspace()
+    assert f('\n').isspace()
+    assert f('\t').isspace()
+
+    assert not f('kek').isspace()
+    assert not f('k e k').isspace()
+    assert not f('').isspace()
+
+
+def test_isprintable():
+    assert f('').isprintable()
+    assert f('kek').isprintable()
+
+    assert not f('\n').isprintable()
+
+
 def test_upper():
     assert f('BANANA').upper() == 'BANANA'
     assert f('banana').upper() == 'BANANA'

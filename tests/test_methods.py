@@ -328,3 +328,12 @@ def test_expandtabs():
     assert f('01\t012\t0123\t01234').expandtabs() == '01\t012\t0123\t01234'.expandtabs()
     assert f('01\t012\t0123\t01234').expandtabs(4) == '01\t012\t0123\t01234'.expandtabs(4)
     assert f('').expandtabs(4) == ''.expandtabs(4)
+
+
+def test_istitle():
+    assert f('Kek').istitle()
+    assert f('   Kek').istitle()
+    assert not f('').istitle()
+    assert not f('KEK').istitle()
+    assert not f('kek').istitle()
+    assert not f('   kek').istitle()

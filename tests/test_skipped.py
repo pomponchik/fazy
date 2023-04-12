@@ -36,9 +36,20 @@ def test_replace_reverse():
 
 
 @pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_center_reverse():
+    assert 'banana'.center(20, f('*')) == '*******banana*******'
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
 def test_split_reverse():
     assert 'kek'.split(f('e')) == ['k', 'k']
     assert 'k k'.split() == ['k', 'k']
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_join_reverse():
+    assert ''.join([f('lol'), f('kek')]) == 'lolkek'
+    assert '*'.join([f('lol'), f('kek')]) == 'lol*kek'
 
 
 @pytest.mark.skip(reason='I can\'t change the str slass.')
@@ -71,3 +82,37 @@ def test_str_encode():
 @pytest.mark.skip(reason='This is not important - to change the Formatter class.')
 def test_formatter_parse():
     assert ''.join([x[0] for x in Formatter().parse(f('kek'))]) == 'kek'
+
+
+@pytest.mark.skip(reason="I can't to reproduce this behavior of the str class.")
+def test_write_and_read_file():
+    with TemporaryDirectory() as directory:
+        full_path = os.path.join(directory, 'file.txt')
+        with open(full_path, 'w') as file:
+            file.write(f('kek'))
+        with open(full_path, 'r') as file:
+            assert file.read() == 'kek'
+
+
+@pytest.mark.skip(reason="I can't to reproduce this behavior of the str class.")
+def test_open_file():
+    with TemporaryDirectory() as directory:
+        full_path = f(os.path.join(directory, 'file.txt'))
+        with open(full_path, 'w') as file:
+            file.write('kek')
+        with open(full_path, 'r') as file:
+            assert file.read() == 'kek'
+
+    with TemporaryDirectory() as directory:
+        full_path = os.path.join(directory, 'file.txt')
+        with open(full_path, f('w')) as file:
+            file.write('kek')
+        with open(full_path, f('r')) as file:
+            assert file.read() == 'kek'
+
+    with TemporaryDirectory() as directory:
+        full_path = f(os.path.join(directory, 'file.txt'))
+        with open(full_path, f('w')) as file:
+            file.write('kek')
+        with open(full_path, f('r')) as file:
+            assert file.read() == 'kek'

@@ -1,8 +1,10 @@
+import sys
+
 import pytest
 
 import f
 
-['__rmul__', '__setattr__', '__sizeof__', '__subclasshook__', 'capitalize', 'casefold', 'center', 'expandtabs', 'format_map', 'isalnum', 'isalpha', 'isdecimal', 'isidentifier', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'join', 'ljust', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'splitlines', 'startswith', 'swapcase']
+['casefold', 'expandtabs', 'format_map', 'isalnum', 'isalpha', 'isdecimal', 'isidentifier', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'ljust', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'splitlines', 'swapcase']
 
 def test_dunder_str():
     lazy_string = f('kek')
@@ -70,6 +72,7 @@ def test_dunder_len():
 
     assert len(f('lol')) == 3
     assert len(f('{kek}')) == 10
+    assert len(f('')) == 0
 
 
 def test_dunder_dir():
@@ -215,13 +218,37 @@ def test_str_dunder_rmod():
 
 
 def test_dunder_mul():
+    assert f('*') * 0 == f('')
     assert f('*') * 2 == f('**')
     assert f('*') * 10 == f('**********')
+
+    assert f('*') * 0 != f('kek')
+    assert f('*') * 2 != f('*')
+    assert f('*') * 10 != f('*')
+
+
+def test_dunder_rmul():
+    assert 2 * f('*') == f('**')
 
 
 def test_dunder_reduce():
     # an str reference
     with pytest.raises(TypeError):
         'kek'.__reduce__()
+
     with pytest.raises(TypeError):
         f('kek').__reduce__()
+
+
+def test_dunder_setattr():
+    # an str reference
+    with pytest.raises(AttributeError):
+        ''.kek = 'kek'
+
+    with pytest.raises(AttributeError):
+        f('').kek = 'kek'
+
+
+def test_dunder_sizeof():
+    assert isinstance(sys.getsizeof(f('kek')), int)
+    assert sys.getsizeof(f('kek')) > sys.getsizeof('kek')

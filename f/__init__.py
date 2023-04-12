@@ -16,6 +16,8 @@ class ChainUnit:
 
 
 class LazyString(UserString, str):
+    __slots__ = ('units', 'local_locals', 'local_globals', 'local_nonlocals', 'lazy', 'result')
+
     def __init__(self, units, local_locals, local_globals, local_nonlocals, lazy):
         self.units = units
         self.local_locals = local_locals
@@ -57,6 +59,9 @@ class LazyString(UserString, str):
     def __mul__(self, n):
         return self.data * n
 
+    def __rmul__(self, n):
+        return self.data * n
+
     def __ne__(self, other):
         if isinstance(other, type(self)):
             other = other.data
@@ -64,6 +69,13 @@ class LazyString(UserString, str):
 
     def __reduce__(self):
         raise TypeError('cannot pickle {0} object'.format(type(self).__name__))
+
+    def __setattr__(self, name, value):
+        if name not in type(self).__slots__:
+            raise AttributeError(
+                "'{0}' object has no attribute '{1}'".format(type(self).__name__, name)
+            )
+        object.__setattr__(self, name, value)
 
     def replace(self, old, new, maxsplit=-1):
         if isinstance(old, type(self)):
@@ -92,10 +104,31 @@ class LazyString(UserString, str):
     def title(self):
         return self.data.title()
 
+    def startswith(self, prefix, *other_args):
+        if isinstance(prefix, type(self)):
+            prefix = prefix.data
+        return self.data.startswith(prefix, *other_args)
+
     def endswith(self, suffix, *other_args):
         if isinstance(suffix, type(self)):
             suffix = suffix.data
         return self.data.endswith(suffix, *other_args)
+
+    def index(self, sub, *other):
+        if isinstance(sub, type(self)):
+            sub = sub.data
+        return self.data.index(sub, *other)
+
+    def center(self, width, *others):
+        others = [other.data if isinstance(other, type(self)) else other for other in others]
+        return self.data.center(width, *others)
+
+    def join(self, iterable):
+        iterable = [item.data if isinstance(item, type(self)) else item for item in iterable]
+        return self.data.join(iterable)
+
+    def capitalize(self):
+        return self.data.capitalize()
 
     @property
     def data(self):

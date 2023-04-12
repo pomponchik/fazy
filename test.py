@@ -1,8 +1,3 @@
-from collections import UserString
+import f
 
-
-class MyString(UserString):
-    pass
-
-
-assert MyString('lol kek').split() == ['lol', 'kek']
+print(f(''))

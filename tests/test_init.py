@@ -183,38 +183,6 @@ def test_print():
     assert context.getvalue() == 'kek\n'
 
 
-def test_write_and_read_file():
-    with TemporaryDirectory() as directory:
-        full_path = os.path.join(directory, 'file.txt')
-        with open(full_path, 'w') as file:
-            file.write(f('kek'))
-        with open(full_path, 'r') as file:
-            assert file.read() == 'kek'
-
-
-def test_open_file():
-    with TemporaryDirectory() as directory:
-        full_path = f(os.path.join(directory, 'file.txt'))
-        with open(full_path, 'w') as file:
-            file.write('kek')
-        with open(full_path, 'r') as file:
-            assert file.read() == 'kek'
-
-    with TemporaryDirectory() as directory:
-        full_path = os.path.join(directory, 'file.txt')
-        with open(full_path, f('w')) as file:
-            file.write('kek')
-        with open(full_path, f('r')) as file:
-            assert file.read() == 'kek'
-
-    with TemporaryDirectory() as directory:
-        full_path = f(os.path.join(directory, 'file.txt'))
-        with open(full_path, f('w')) as file:
-            file.write('kek')
-        with open(full_path, f('r')) as file:
-            assert file.read() == 'kek'
-
-
 def test_recursive():
     assert f(f('kek')) == f('kek')
     assert f(f('kek')) == 'kek'

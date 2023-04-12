@@ -145,6 +145,21 @@ def test_format():
     assert '{0}'.format(f('kek')) == 'kek'
 
 
+def test_startswith():
+    # str references
+    assert 'kek'.startswith('ke')
+    assert 'kek'.startswith('')
+    assert not 'kek'.startswith('pe')
+
+    assert f('kek').startswith('ke')
+    assert f('kek').startswith('')
+    assert not f('kek').startswith('pe')
+
+    assert f('kek').startswith(f('ke'))
+    assert f('kek').startswith(f(''))
+    assert not f('kek').startswith(f('pe'))
+
+
 def test_endswith():
     # str references
     assert 'kek'.endswith('ek')
@@ -168,3 +183,35 @@ def test_isdigit():
     assert not f('-8').isdigit()
     assert not f('kek').isdigit()
     assert not f('09 kek').isdigit()
+
+
+def test_center():
+    # str references
+    assert 'banana'.center(20) == '       banana       '
+    assert 'banana'.center(2) == 'banana'
+    assert 'banana'.center(20, '*') == '*******banana*******'
+
+    assert f('banana').center(20) == '       banana       '
+    assert f('banana').center(2) == 'banana'
+    assert f('banana').center(20, '*') == '*******banana*******'
+    assert f('banana').center(20, f('*')) == '*******banana*******'
+
+
+def test_join():
+    # str references
+    assert ''.join(['lol', 'kek']) == 'lolkek'
+    assert '*'.join(['lol', 'kek']) == 'lol*kek'
+
+    assert f('').join(['lol', 'kek']) == 'lolkek'
+    assert f('*').join(['lol', 'kek']) == 'lol*kek'
+
+    assert f('').join([f('lol'), f('kek')]) == 'lolkek'
+    assert f('*').join([f('lol'), f('kek')]) == 'lol*kek'
+
+
+def test_capitalize():
+    assert ''.capitalize() == ''
+    assert 'kek'.capitalize() == 'Kek'
+
+    assert f('').capitalize() == ''
+    assert f('kek').capitalize() == 'Kek'

@@ -4,7 +4,7 @@ import pytest
 
 import f
 
-['maketrans', 'partition', 'rfind', 'rindex', 'rpartition', 'rsplit', 'rstrip', 'swapcase']
+['maketrans', 'partition', 'rfind', 'rindex', 'rpartition', 'rsplit', 'swapcase']
 
 def test_dunder_str():
     lazy_string = f('kek')

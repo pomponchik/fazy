@@ -149,6 +149,11 @@ class LazyString(UserString, str):
             chars = chars.data
         return self.data.lstrip(chars)
 
+    def rstrip(self, chars=None):
+        if isinstance(chars, type(self)):
+            chars = chars.data
+        return self.data.rstrip(chars)
+
     def ljust(self, width, *args):
         args = [item.data if isinstance(item, type(self)) else item for item in args]
         return self.data.ljust(width, *args)

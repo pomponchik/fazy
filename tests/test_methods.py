@@ -386,6 +386,17 @@ def test_lstrip():
     assert f('kek  ').lstrip(f(' ')) == 'kek  '
 
 
+def test_rstrip():
+    assert f('  kek  ').rstrip() == '  kek'
+    assert f('kek').rstrip() == 'kek'
+    assert f('  kek').rstrip() == '  kek'
+    assert f('kekabc').rstrip('abc') == 'kek'
+    assert f('kekccc').rstrip('c') == 'kek'
+    assert f('kekabc').rstrip(f('abc')) == 'kek'
+    assert f('  kek').rstrip(' ') == '  kek'
+    assert f('  kek').rstrip(f(' ')) == '  kek'
+
+
 def test_ljust():
     assert f('kek').ljust(5) == 'kek  '
     assert f('kek').ljust(5, 'k') == 'kekkk'

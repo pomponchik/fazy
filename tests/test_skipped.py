@@ -94,6 +94,18 @@ def test_rjust_reverse():
     assert 'kek'.rjust(5, f('k')) == 'kkkek'
 
 
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_lstrip_reverse():
+    assert 'abckek'.lstrip(f('abc')) == 'kek'
+    assert '  kek  '.lstrip(f(' ')) == 'kek  '
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_rstrip_reverse():
+    assert 'kekabc'.rstrip(f('abc')) == 'kek'
+    assert '  kek  '.rstrip(f(' ')) == '  kek'
+
+
 @pytest.mark.skip(reason='In MVP i won\'t do it.')
 def test_pickle():
     representation = pickle.dumps(f('kek'))

@@ -164,6 +164,8 @@ print(perf_counter() - t1)
 
 On my computer (a MacBook Pro with an Apple M1 Pro processor), the execution of this code takes about 2.4 seconds, that is, about **0.00024 seconds for 1 iteration**. However, if I replace `str(f('the number is {number}'))` with `str(f'the number is {number}')`, the execution time will be 0.0022 seconds, about **0.00000022 seconds for 1 iteration**.
 
-> So, the original f-strings in this case turned out to be more than **100 times faster**.
+> So, the original f-strings in this case turned out to be more than **1000 times faster**.
 
 However, this does not mean that f-strings are faster in all cases. In real use, you should consider how fast the expressions that you insert into the f-strings are evaluated. If this is significantly slower than actually required for extrapolation, saving on deferred extrapolation may make sense.
+
+Most of the extrapolation time is actually taken not by the extrapolation itself, but by collecting various data for display from the stack and the garbage collector. Unfortunately, if you want to completely replicate the behavior of the original f-strings, these costs are unavoidable.

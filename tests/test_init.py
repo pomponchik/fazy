@@ -1,4 +1,5 @@
 import os
+import logging
 from io import StringIO
 from contextlib import redirect_stdout
 
@@ -194,3 +195,37 @@ def test_lazy_mode_is_not_implemented():
 def test_lazy_syntax_error():
     with pytest.raises(SyntaxError):
         str(f('{a..}'))
+
+
+def test_logging():
+    class ListHandler(logging.Handler):
+        def __init__(self, log_list):
+            logging.Handler.__init__(self)
+            self.lst = log_list
+        def emit(self, record):
+            self.lst.append(record)
+
+    lst = []
+    logging_handler = ListHandler(lst)
+    logging.root.addHandler(logging_handler)
+
+    logging.error(f('kek'))
+
+    assert lst[0].msg == 'kek'
+    assert lst[0].message == 'kek'
+
+    assert isinstance(lst[0].msg, type(f('kek')))
+    assert type(lst[0].message) is str
+
+
+def test_logging_to_file():
+    file_name = os.path.join('tests', 'data', 'file.log')
+    logging.root.addHandler(logging.FileHandler(file_name))
+
+    logging.error(f('kek'))
+
+    with open(file_name, 'r') as file:
+        content = file.read()
+        assert content == 'kek\n'
+
+    os.remove(file_name)

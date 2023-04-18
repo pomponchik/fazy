@@ -84,6 +84,11 @@ class LazyString(UserString, str):
             sep = sep.data
         return self.data.split(sep, maxsplit)
 
+    def rsplit(self, sep=None, maxsplit=-1):
+        if isinstance(sep, type(self)):
+            sep = sep.data
+        return self.data.rsplit(sep, maxsplit)
+
     def lower(self):
         return self.data.lower()
 
@@ -113,6 +118,11 @@ class LazyString(UserString, str):
         if isinstance(sub, type(self)):
             sub = sub.data
         return self.data.index(sub, *other)
+
+    def rindex(self, sub, *other):
+        if isinstance(sub, type(self)):
+            sub = sub.data
+        return self.data.rindex(sub, *other)
 
     def center(self, width, *others):
         others = [other.data if isinstance(other, type(self)) else other for other in others]
@@ -165,6 +175,33 @@ class LazyString(UserString, str):
     def encode(self, **kwargs):
         kwargs = {key: value.data if isinstance(value, type(self)) else value for key, value in kwargs.items()}
         return self.data.encode(**kwargs)
+
+    @staticmethod
+    def maketrans(x, *others):
+        others = [item.data if isinstance(item, UserString) else item for item in others]
+        x = x.data if isinstance(x, UserString) else x
+
+        if isinstance(x, str):
+            return str.maketrans(x, *others)
+
+        first_item = {}
+        for key, value in x.items():
+            key = key.data if isinstance(key, UserString) else key
+            value = value.data if isinstance(value, UserString) else value
+            first_item[key] = value
+
+        return str.maketrans(first_item, *others)
+
+    def partition(self, sep):
+        sep = sep.data if isinstance(sep, type(self)) else sep
+        return self.data.partition(sep)
+
+    def rpartition(self, sep):
+        sep = sep.data if isinstance(sep, type(self)) else sep
+        return self.data.rpartition(sep)
+
+    def swapcase(self):
+        return self.data.swapcase()
 
     @property
     def data(self):

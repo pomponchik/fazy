@@ -33,6 +33,13 @@ def test_split():
     assert f('1,2,3').split(',', maxsplit=1) == ['1', '2,3']
 
 
+def test_rsplit():
+    assert f('kek').rsplit('e') == ['k', 'k']
+    assert f('kek').rsplit(f('e')) == ['k', 'k']
+    assert f('k k').rsplit() == ['k', 'k']
+    assert f('1,2,3').rsplit(',', maxsplit=1) == ['1,2', '3']
+
+
 def test_splitlines():
     assert f('kek').splitlines() == ['kek']
     assert f('kek\n').splitlines() == ['kek']
@@ -61,6 +68,25 @@ def test_find():
         f('kek').find(0)
 
 
+def test_rfind():
+    # str references
+    assert 'kek'.rfind('k') == 2
+    assert 'kek'.rfind('e') == 1
+    assert 'kek'.rfind('p') == -1
+
+    assert f('kek').rfind('k') == 2
+    assert f('kek').rfind(f('k')) == 2
+
+    assert f('kek').rfind('e') == 1
+    assert f('kek').rfind(f('e')) == 1
+
+    assert f('kek').rfind('p') == -1
+    assert f('kek').rfind(f('p')) == -1
+
+    with pytest.raises(TypeError):
+        f('kek').rfind(0)
+
+
 def test_index():
     # str references
     assert 'kek'.index('k') == 0
@@ -80,6 +106,27 @@ def test_index():
         f('kek').index(f('p'))
     with pytest.raises(TypeError):
         f('kek').index(0)
+
+
+def test_rindex():
+    # str references
+    assert 'kek'.rindex('k') == 2
+    assert 'kek'.rindex('e') == 1
+    with pytest.raises(ValueError):
+        'kek'.rindex('p') == -1
+
+    assert f('kek').rindex('k') == 2
+    assert f('kek').rindex(f('k')) == 2
+
+    assert f('kek').rindex('e') == 1
+    assert f('kek').rindex(f('e')) == 1
+
+    with pytest.raises(ValueError):
+        f('kek').rindex('p')
+    with pytest.raises(ValueError):
+        f('kek').rindex(f('p'))
+    with pytest.raises(TypeError):
+        f('kek').rindex(0)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 7), reason='Requires python3.7, look at documentation: https://docs.python.org/3/library/stdtypes.html#str.isascii')
@@ -409,3 +456,29 @@ def test_rjust():
     assert f('kek').rjust(5) == '  kek'
     assert f('kek').rjust(5, 'k') == 'kkkek'
     assert f('kek').rjust(5, f('k')) == 'kkkek'
+
+
+def test_maketrans():
+    assert f('kek').maketrans({}) == {}
+    assert str.maketrans('mSa', 'eJo', 'odnght') == f('kek').maketrans('mSa', 'eJo', 'odnght')
+    assert str.maketrans('mSa', 'eJo', 'odnght') == f('kek').maketrans(f('mSa'), f('eJo'), f('odnght'))
+    assert str.maketrans('S', 'P') == f('kek').maketrans('S', 'P')
+    assert str.maketrans('S', 'P') == f('kek').maketrans(f('S'), f('P'))
+
+
+def test_partition():
+    assert f('kek').partition('e') == ('k', 'e', 'k')
+    assert f('kek').partition('i') == ('kek', '', '')
+    assert f('kek').partition(f('e')) == ('k', 'e', 'k')
+
+
+def test_rpartition():
+    assert f('kek').rpartition('e') == ('k', 'e', 'k')
+    assert f('kek').rpartition('i') == ('', '', 'kek')
+    assert f('kek').rpartition(f('e')) == ('k', 'e', 'k')
+
+
+def test_swapcase():
+    assert f('kek').swapcase() == 'KEK'
+    assert f('KEK').swapcase() == 'kek'
+    assert f('KeK').swapcase() == 'kEk'

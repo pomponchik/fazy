@@ -46,7 +46,23 @@ def test_center_reverse():
 @pytest.mark.skip(reason='I can\'t change the str slass.')
 def test_split_reverse():
     assert 'kek'.split(f('e')) == ['k', 'k']
-    assert 'k k'.split() == ['k', 'k']
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_rsplit_reverse():
+    assert 'kek'.rsplit(f('e')) == ['k', 'k']
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_index_reverse():
+    assert 'kek'.index(f('k')) == 0
+    assert 'kek'.index(f('e')) == 1
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_rindex_reverse():
+    assert 'kek'.rindex(f('k')) == 2
+    assert 'kek'.rindex(f('e')) == 1
 
 
 @pytest.mark.skip(reason='I can\'t change the str slass.')
@@ -78,6 +94,13 @@ def test_find_reverse():
 
 
 @pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_rfind_reverse():
+    assert 'kek'.rfind(f('k')) == 2
+    assert 'kek'.rfind(f('e')) == 1
+    assert 'kek'.rfind(f('p')) == -1
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
 def test_endswith_reverse():
     assert 'kek'.endswith(f('ek'))
     assert 'kek'.endswith(f(''))
@@ -104,6 +127,23 @@ def test_lstrip_reverse():
 def test_rstrip_reverse():
     assert 'kekabc'.rstrip(f('abc')) == 'kek'
     assert '  kek  '.rstrip(f(' ')) == '  kek'
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_maketrans_reverse():
+    assert str.maketrans(f('S'), f('P')) == f('kek').maketrans(f('S'), f('P'))
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_partition_reverse():
+    assert 'kek'.partition(f('e')) == ('k', 'e', 'k')
+    assert 'kek'.partition(f('i')) == ('kek', '', '')
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_rpartition_reverse():
+    assert 'kek'.rpartition(f('e')) == ('k', 'e', 'k')
+    assert 'kek'.rpartition(f('i')) == ('', '', 'kek')
 
 
 @pytest.mark.skip(reason='In MVP i won\'t do it.')

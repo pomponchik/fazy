@@ -19,7 +19,6 @@ Lazy f-strings are the holy grail of Python development. Now they are found.
 - [**How does it work?**](#how-does-it-work)
 - [**Limitations**](#limitations)
 - [**Benchmarks**](#benchmarks)
-- [**Links**](#links)
 
 
 ## Quick start
@@ -144,18 +143,9 @@ Based on the description of the internal structure of the library, you can under
 
 ## Benchmarks
 
-## Links
-
-
-
-
-
-Протестировать, что счетчик ссылок на интерполируемый обьект уменьшается после интерполяции.
 
 
 
 2. Бенчмарки
 С интерполяцией и без, извлечение всех локалов и глобалов тоже отжирает время
 Указать оборудование
-
-Дать ссылку на другую либу с f-строками

@@ -162,6 +162,10 @@ class LazyString(UserString, str):
         args = [item.data if isinstance(item, type(self)) else item for item in args]
         return self.data.rjust(width, *args)
 
+    def encode(self, **kwargs):
+        kwargs = {key: value.data if isinstance(value, type(self)) else value for key, value in kwargs.items()}
+        return self.data.encode(**kwargs)
+
     @property
     def data(self):
         if self.result is not None:

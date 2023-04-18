@@ -8,6 +8,8 @@ import f
 def test_encode():
     assert isinstance(f('kek').encode(), bytes)
     assert f('kek').encode() == b'kek'
+    assert f('kek').encode(encoding='UTF-8', errors='strict') == b'kek'
+    assert f('kek').encode(encoding=f('UTF-8'), errors=f('strict')) == b'kek'
     assert f('').encode() == b''
     assert f('{123}').encode() == b'123'
 

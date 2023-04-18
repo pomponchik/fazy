@@ -134,12 +134,12 @@ class LazyString(UserString, str):
     def expandtabs(self, tabsize=8):
         return self.data.expandtabs(tabsize)
 
-    def removeprefix(self, prefix, /):
+    def removeprefix(self, prefix):
         if isinstance(prefix, type(self)):
             prefix = prefix.data
         return self.data.removeprefix(prefix)
 
-    def removesuffix(self, suffix, /):
+    def removesuffix(self, suffix):
         if isinstance(suffix, type(self)):
             suffix = suffix.data
         return self.data.removesuffix(suffix)

@@ -113,9 +113,9 @@ The function `f` returns an object of the `LazyString` class. This class is inhe
 
 There are 3 scopes of variable names that are extracted from the call stack to allow them to be used inside expressions:
 
-1. Local variables.
-2. Global variables.
-3. Intermediate variables that are used, for example, when creating [closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)). To give them a more precise definition, these are such local variables of all functions higher up the call stack, which refer to functions that in the code wrap the function being executed at the moment (I know this sentence may not be so easy to read and understand the first time). This means that, going through the call stack, we ignore all scopes with local variables for functions that are not the parents of the function being executed at the moment.
+1. **Local variables**.
+2. **Global variables**.
+3. **Intermediate variables** that are used, for example, when creating [closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)). To give them a more precise definition, these are such local variables of all functions higher up the call stack, which refer to functions that in the code wrap the function being executed at the moment (I know this sentence may not be so easy to read and understand the first time). This means that, going through the call stack, we ignore all scopes with local variables for functions that are not the parents of the function being executed at the moment.
 
 As you might guess from the size of the description, the most interesting type of scopes is the third - intermediate variables. The expected approach to determine the nesting of functions is an analysis of the source code. However, compiling a large amount of source code just to figure out which function wraps another one would be too costly. Therefore, in this case, a hack is used based on knowledge of how memory management occurs inside the interpreter. The fact is that the garbage collector knows about all the objects that exist in memory, as well as about the links between them. The function in which a particular frame of the call stack is executed can be found by requesting from the gc all objects containing references to it. After retrieving the function object, you can determine whether it is the parent of the currently executed one. To do this, you just need to compare their full names (qualnames) stored in the metadata of the functions. This is the approach used in this library.
 

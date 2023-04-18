@@ -226,6 +226,8 @@ class LazyString(UserString, str):
         self.result = ''.join(result)
         del self.units
         del self.local_locals
+        del self.local_nonlocals
+        del self.local_globals
 
         return self.result
 

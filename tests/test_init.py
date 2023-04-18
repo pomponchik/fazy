@@ -228,4 +228,7 @@ def test_logging_to_file():
         content = file.read()
         assert content == 'kek\n'
 
-    os.remove(file_name)
+    try:
+        os.remove(file_name)
+    except PermissionError:  # windows oddities
+        pass

@@ -1,23 +1,10 @@
-from time import sleep
-import logging
+from time import perf_counter
 import f
 
-class LongPrintable:
-    def __init__(self, data):
-        self.data = data
 
-    def __str__(self):
-        sleep(10.0)
-        return str(self.data)
+t1 = perf_counter()
 
+for number in range(10000):
+    str(f'the number is {number}')
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.StreamHandler(),
-    ]
-)
-
-number = LongPrintable(33)
-logging.info(f('{number} kittens drink milk'))
+print(perf_counter() - t1)

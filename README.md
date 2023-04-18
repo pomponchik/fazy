@@ -18,7 +18,7 @@ Lazy f-strings are the holy grail of Python development. Now they are found.
 - [**The problem**](#the-problem)
 - [**How does it work?**](#how-does-it-work)
 - [**Limitations**](#limitations)
-- [**Benchmarks**](#benchmarks)
+- [**Benchmark**](#benchmark)
 
 
 ## Quick start
@@ -123,7 +123,7 @@ As you might guess from the size of the description, the most interesting type o
 
 Based on the description of the internal structure of the library, you can understand that there are some limitations that should be taken into account. Here are some of them:
 
-- **The performance is obviously less** than that of the original f-strings embedded in the interpreter. Read more about this in the section with [benchmarks](#benchmarks).
+- **The performance is obviously less** than that of the original f-strings embedded in the interpreter. Read more about this in the section with [benchmark](#benchmark).
 - **Mutable objects can change their state between the time the references to them are saved and the final calculation of the string**. This means, for example, that if you create a `LazyString` object containing a reference to the list, then add another element to the list, and after that calculate the string - you will see the list in the already changed state in this line.
 - Heavy objects may not be destroyed during garbage collection as long as references to them are stored inside the `LazyString`. This may look like a memory leak in some rare cases and you should keep this in mind.
 - **`LazyString` objects, despite their almost complete similarity to `str`, still do not fully replace ordinary strings**. For example, such a string cannot be written to a file or serialized using pickle. Many built-in Python functions expect only ordinary strings and it is impossible to fake it in any way. There is no way to get the full functionality of regular strings from `LazyString`, except to convert `LazyString` to `str`, like this:
@@ -141,11 +141,29 @@ Based on the description of the internal structure of the library, you can under
 - In most code editors and IDE, special **syntax highlighting for f-strings will not work**.
 
 
-## Benchmarks
+## Benchmark
+
+If you have read the text above, you already know that this implementation is slower than the original f-strings. But how much?
+
+In fact, it is impossible to accurately predict the complexity of operations related to string extrapolation. It depends on many factors, including the depth of the call stack, the number of local and global variables, whether this function is nested in other functions, and also, obviously, the complexity of executing the expression that you have embedded in the string.
+
+For example, we will consider the degenerate case:
+
+```python
+from time import perf_counter
+import f
 
 
+t1 = perf_counter()
 
+for number in range(10000):
+    str(f('the number is {number}'))
 
-2. Бенчмарки
-С интерполяцией и без, извлечение всех локалов и глобалов тоже отжирает время
-Указать оборудование
+print(perf_counter() - t1)
+```
+
+On my computer (a MacBook Pro with an Apple M1 Pro processor), the execution of this code takes about 2.4 seconds, that is, about **0.00024 seconds for 1 iteration**. However, if I replace `str(f('the number is {number}'))` with `str(f'the number is {number}')`, the execution time will be 0.0022 seconds, about **0.00000022 seconds for 1 iteration**.
+
+> So, the original f-strings in this case turned out to be more than **100 times faster**.
+
+However, this does not mean that f-strings are faster in all cases. In real use, you should consider how fast the expressions that you insert into the f-strings are evaluated. If this is significantly slower than actually required for extrapolation, saving on deferred extrapolation may make sense.

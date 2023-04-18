@@ -12,8 +12,14 @@
 Lazy f-strings are the holy grail of Python development. Now they are found.
 
 
+## Table of contents
+
 - [**Quick start**](#quick-start)
 - [**The problem**](#the-problem)
+- [**How does it work?**](#how-does-it-work?)
+- [**Limitations**](#limitations)
+- [**Benchmarks**](#benchmarks)
+- [**Links**](#links)
 
 
 ## Quick start

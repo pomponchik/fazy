@@ -28,6 +28,16 @@ def test_split():
     assert f('kek').split('e') == ['k', 'k']
     assert f('kek').split(f('e')) == ['k', 'k']
     assert f('k k').split() == ['k', 'k']
+    assert f('1,2,3').split(',', maxsplit=1) == ['1', '2,3']
+
+
+def test_splitlines():
+    assert f('kek').splitlines() == ['kek']
+    assert f('kek\n').splitlines() == ['kek']
+    assert f('lol\nkek\n').splitlines() == ['lol', 'kek']
+    assert f('kek\n').splitlines() == ['kek']
+    assert f('lol\nkek\n').splitlines(keepends=True) == ['lol\n', 'kek\n']
+    assert f('kek\n').splitlines(keepends=True) == ['kek\n']
 
 
 def test_find():
@@ -337,3 +347,52 @@ def test_istitle():
     assert not f('KEK').istitle()
     assert not f('kek').istitle()
     assert not f('   kek').istitle()
+
+
+@pytest.mark.skipif(sys.version_info < (3, 9), reason='Requires python3.9, look at documentation: https://docs.python.org/3/library/stdtypes.html#str.removeprefix')
+def test_removeprefix():
+    # str references
+    assert 'TestHook'.removeprefix('Test') == 'Hook'
+    assert 'BaseTestCase'.removeprefix('Test') == 'BaseTestCase'
+
+    assert f('TestHook').removeprefix('Test') == 'Hook'
+    assert f('BaseTestCase').removeprefix('Test') == 'BaseTestCase'
+
+    assert f('TestHook').removeprefix(f('Test')) == 'Hook'
+    assert f('BaseTestCase').removeprefix(f('Test')) == 'BaseTestCase'
+
+
+@pytest.mark.skipif(sys.version_info < (3, 9), reason='Requires python3.9, look at documentation: https://docs.python.org/3/library/stdtypes.html#str.removeprefix')
+def test_removesuffix():
+    # str references
+    assert 'TestHook'.removesuffix('Hook') == 'Test'
+    assert 'BaseTestCase'.removesuffix('Test') == 'BaseTestCase'
+
+    assert f('TestHook').removesuffix('Hook') == 'Test'
+    assert f('BaseTestCase').removesuffix('Test') == 'BaseTestCase'
+
+    assert f('TestHook').removesuffix(f('Hook')) == 'Test'
+    assert f('BaseTestCase').removesuffix(f('Test')) == 'BaseTestCase'
+
+
+def test_lstrip():
+    assert f('  kek  ').lstrip() == 'kek  '
+    assert f('kek').lstrip() == 'kek'
+    assert f('kek  ').lstrip() == 'kek  '
+    assert f('abckek').lstrip('abc') == 'kek'
+    assert f('ccckek').lstrip('c') == 'kek'
+    assert f('abckek').lstrip(f('abc')) == 'kek'
+    assert f('kek  ').lstrip(' ') == 'kek  '
+    assert f('kek  ').lstrip(f(' ')) == 'kek  '
+
+
+def test_ljust():
+    assert f('kek').ljust(5) == 'kek  '
+    assert f('kek').ljust(5, 'k') == 'kekkk'
+    assert f('kek').ljust(5, f('k')) == 'kekkk'
+
+
+def test_rjust():
+    assert f('kek').rjust(5) == '  kek'
+    assert f('kek').rjust(5, 'k') == 'kkkek'
+    assert f('kek').rjust(5, f('k')) == 'kkkek'

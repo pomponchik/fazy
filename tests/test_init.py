@@ -1,8 +1,6 @@
 import os
-import pickle
 from io import StringIO
 from contextlib import redirect_stdout
-from tempfile import TemporaryDirectory
 
 import pytest
 
@@ -191,3 +189,8 @@ def test_recursive():
 def test_lazy_mode_is_not_implemented():
     with pytest.raises(NotImplementedError):
         f('kek', lazy=False)
+
+
+def test_lazy_syntax_error():
+    with pytest.raises(SyntaxError):
+        str(f('{a..}'))

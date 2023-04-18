@@ -134,6 +134,29 @@ class LazyString(UserString, str):
     def expandtabs(self, tabsize=8):
         return self.data.expandtabs(tabsize)
 
+    def removeprefix(self, prefix, /):
+        if isinstance(prefix, type(self)):
+            prefix = prefix.data
+        return self.data.removeprefix(prefix)
+
+    def removesuffix(self, suffix, /):
+        if isinstance(suffix, type(self)):
+            suffix = suffix.data
+        return self.data.removesuffix(suffix)
+
+    def lstrip(self, chars=None):
+        if isinstance(chars, type(self)):
+            chars = chars.data
+        return self.data.lstrip(chars)
+
+    def ljust(self, width, *args):
+        args = [item.data if isinstance(item, type(self)) else item for item in args]
+        return self.data.ljust(width, *args)
+
+    def rjust(self, width, *args):
+        args = [item.data if isinstance(item, type(self)) else item for item in args]
+        return self.data.rjust(width, *args)
+
     @property
     def data(self):
         if self.result is not None:

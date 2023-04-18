@@ -4,7 +4,7 @@ import pytest
 
 import f
 
-['ljust', 'lstrip', 'maketrans', 'partition', 'removeprefix', 'removesuffix', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'splitlines', 'swapcase']
+['maketrans', 'partition', 'rfind', 'rindex', 'rpartition', 'rsplit', 'rstrip', 'swapcase']
 
 def test_dunder_str():
     lazy_string = f('kek')
@@ -195,6 +195,7 @@ def test_dunder_hash():
 
 def test_dunder_iter():
     assert ''.join([x for x in f('1234')]) == f('1234')
+    assert ''.join([x for x in f('1234')]) == '1234'
     assert ''.join([x for x in f('{1234}')]) == f('1234')
     assert ''.join([x for x in f('')]) == f('')
 

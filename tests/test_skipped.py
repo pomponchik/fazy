@@ -1,3 +1,6 @@
+import sys
+import pickle
+from tempfile import TemporaryDirectory
 from string import Formatter
 
 import f
@@ -47,9 +50,24 @@ def test_split_reverse():
 
 
 @pytest.mark.skip(reason='I can\'t change the str slass.')
+@pytest.mark.skipif(sys.version_info < (3, 9), reason='Requires python3.9, look at documentation: https://docs.python.org/3/library/stdtypes.html#str.removeprefix')
+def test_removeprefix_reverse():
+    assert 'TestHook'.removeprefix(f('Test')) == 'Hook'
+    assert 'BaseTestCase'.removeprefix(f('Test')) == 'BaseTestCase'
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+@pytest.mark.skipif(sys.version_info < (3, 9), reason='Requires python3.9, look at documentation: https://docs.python.org/3/library/stdtypes.html#str.removeprefix')
+def test_removesuffix_reverse():
+    assert 'TestHook'.removesuffix(f('Hook')) == 'Test'
+    assert 'BaseTestCase'.removesuffix(f('Test')) == 'BaseTestCase'
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
 def test_join_reverse():
     assert ''.join([f('lol'), f('kek')]) == 'lolkek'
     assert '*'.join([f('lol'), f('kek')]) == 'lol*kek'
+    assert '*'.join(['lol', f('kek')]) == 'lol*kek'
 
 
 @pytest.mark.skip(reason='I can\'t change the str slass.')
@@ -64,6 +82,16 @@ def test_endswith_reverse():
     assert 'kek'.endswith(f('ek'))
     assert 'kek'.endswith(f(''))
     assert not 'kek'.endswith(f('pe'))
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_ljust_reverse():
+    assert 'kek'.ljust(5, f('k')) == 'kekkk'
+
+
+@pytest.mark.skip(reason='I can\'t change the str slass.')
+def test_rjust_reverse():
+    assert 'kek'.rjust(5, f('k')) == 'kkkek'
 
 
 @pytest.mark.skip(reason='In MVP i won\'t do it.')

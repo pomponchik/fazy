@@ -143,7 +143,7 @@ Based on the description of the internal structure of the library, you can under
 
 ## Benchmark
 
-If you have read the text above, you already know that this implementation is slower than the original f-strings. But how much?
+If you have read the text above, you already know that this implementation is slower than the original f-strings. But for how long?
 
 In fact, it is impossible to accurately predict the complexity of operations related to string extrapolation. It depends on many factors, including the depth of the call stack, the number of local and global variables, whether this function is nested in other functions, and also, obviously, the complexity of executing the expression that you have embedded in the string.
 

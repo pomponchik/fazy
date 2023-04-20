@@ -232,3 +232,11 @@ def test_logging_to_file():
         os.remove(file_name)
     except PermissionError:  # windows oddities
         pass
+
+
+def test_list_comprehension():
+    assert [f('{x}') for x in range(5)] == ['0', '1', '2', '3', '4']
+
+
+def test_genexprs():
+    assert list((f('{x}') for x in range(5))) == ['0', '1', '2', '3', '4']

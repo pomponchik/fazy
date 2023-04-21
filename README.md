@@ -31,11 +31,11 @@ pip install fazy
 And use:
 
 ```python
-import f
-
-number = 33
-print(f('{number} kittens drink milk'))
-# 33 kittens drink milk
+>>> import f
+>>>
+>>> number = 33
+>>> print(f('{number} kittens drink milk'))
+33 kittens drink milk
 ```
 
 ## The problem

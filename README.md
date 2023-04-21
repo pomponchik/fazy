@@ -8,7 +8,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/fazy.svg)](https://pypi.python.org/pypi/fazy)
 
 
-Lazy f-strings are the holy grail of Python development. Now they are found.
+Lazy f-strings are the holy grail of Python development. Now it is found.
 
 
 ## Table of contents

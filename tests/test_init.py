@@ -182,6 +182,13 @@ def test_print():
     assert context.getvalue() == 'kek\n'
 
 
+def test_print_into_exec():
+    with redirect_stdout(StringIO()) as context:
+        exec("import f;print(f('kek'))")
+
+    assert context.getvalue() == 'kek\n'
+
+
 def test_recursive():
     assert f(f('kek')) == f('kek')
     assert f(f('kek')) == 'kek'

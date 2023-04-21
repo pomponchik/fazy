@@ -26,7 +26,7 @@ class ProxyModule(sys.modules[__name__].__class__):
         )
 
     def sum_of_nonlocals(self, first_frame, base_qualname):
-        if first_frame is None:
+        if first_frame is None or base_qualname is None:
             return {}
 
         all_locals = []

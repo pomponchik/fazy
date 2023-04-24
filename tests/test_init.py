@@ -194,11 +194,6 @@ def test_recursive():
     assert f(f('kek')) == 'kek'
 
 
-def test_lazy_mode_is_not_implemented():
-    with pytest.raises(NotImplementedError):
-        f('kek', lazy=False)
-
-
 def test_lazy_syntax_error():
     with pytest.raises(SyntaxError):
         str(f('{a..}'))
@@ -247,3 +242,33 @@ def test_list_comprehension():
 
 def test_genexprs():
     assert list((f('{x}') for x in range(5))) == ['0', '1', '2', '3', '4']
+
+
+def test_not_lazy_mode():
+    number = 33
+
+    assert f('kek', lazy=False) == 'kek'
+    assert f('kek {number}', lazy=False) == 'kek 33'
+
+    assert type(f('kek', lazy=False)) is str
+    assert type(f('kek {number}', lazy=False)) is str
+
+
+def test_no_closures_mode_base_working():
+    number = 5
+
+    assert f('kek {number}', closures=False) == 'kek 5'
+    assert f('kek {GLOBAL_VARIABLE}', closures=False) == 'kek kek'
+
+
+def test_raise_if_closures_when_no_closures_mode():
+    number_1 = 5
+
+    def wrapper():
+        number_2 = 10
+        def wrapped():
+            return f('kek {number_1} {number_2}', closures=False)
+        return wrapped
+
+    with pytest.raises(NameError):
+        assert wrapper()()

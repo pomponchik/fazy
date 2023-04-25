@@ -94,6 +94,16 @@ def test_lazyness():
     assert len(accumulator) == 1
 
 
+def test_not_lazy():
+    number = 5
+
+    assert type(f('kek', lazy=False)) is str
+    assert type(f('{number}', lazy=False)) is str
+
+    assert f('kek', lazy=False) == 'kek'
+    assert f('{number}', lazy=False) == '5'
+
+
 def test_lazyness_affect():
     changeable = [1, 2, 3]
 
@@ -106,6 +116,20 @@ def test_lazyness_affect():
     changeable.append(4)
 
     assert not_lazy_string != lazy_string
+
+
+def test_lazyness_affect_with_no_lazy_flag():
+    changeable = [1, 2, 3]
+
+    not_lazy_string = '{0}'.format(changeable)
+
+    assert not_lazy_string == f('{changeable}')
+
+    lazy_string = f('{changeable}', lazy=False)
+
+    changeable.append(4)
+
+    assert not_lazy_string == lazy_string
 
 
 def test_str_f():
@@ -257,6 +281,7 @@ def test_not_lazy_mode():
 def test_no_closures_mode_base_working():
     number = 5
 
+    assert f('kek', closures=False) == 'kek'
     assert f('kek {number}', closures=False) == 'kek 5'
     assert f('kek {GLOBAL_VARIABLE}', closures=False) == 'kek kek'
 
@@ -272,3 +297,39 @@ def test_raise_if_closures_when_no_closures_mode():
 
     with pytest.raises(NameError):
         assert wrapper()()
+
+
+def test_string_as_variable_when_safe_mode():
+    # default mode is True
+    with pytest.raises(SyntaxError):
+        string = 'kek'
+        f(string)
+
+    with pytest.raises(SyntaxError):
+        string = 'kek'
+        f(string, safe=True)
+
+
+def test_string_as_variable_when_safe_mode_into_generator_function():
+    def generator():
+        string = 'kek'
+        yield f(string)
+
+    with pytest.raises(SyntaxError):
+        for _ in generator():
+            pass
+
+
+def test_string_as_variable_when_safe_mode_into_generator_expression():
+    with pytest.raises(SyntaxError):
+        list(f(string) for string in ['lol', 'kek'])
+
+
+def test_string_as_variable_when_safe_mode_into_double_strings_generator_expression():
+    with pytest.raises(SyntaxError):
+        list((f(string), f('kek')) for string in ['lol', 'kek'])
+
+
+def test_string_as_variable_when_not_safe_mode():
+    string = 'kek'
+    assert f(string, safe=False) == string

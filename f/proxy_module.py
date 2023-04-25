@@ -121,7 +121,7 @@ class ProxyModule(sys.modules[__name__].__class__):
         ConstantVisitor().visit(ast_of_code)
 
         if not flag:
-            raise SyntaxError
+            raise SyntaxError('Unsafe use of a variable as a template.')
 
 
     @staticmethod

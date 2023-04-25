@@ -13,7 +13,7 @@ class ProxyModule(sys.modules[__name__].__class__):
 
     def __call__(self, string, lazy=True, safe=True, closures=True):
         if isinstance(string, LazyString):
-            string = string.data
+            return string
 
         base_frame = inspect.stack(0)[1].frame
 
@@ -81,9 +81,9 @@ class ProxyModule(sys.modules[__name__].__class__):
     def check_code(function, code, code_line):
         try:
             if inspect.isgenerator(function):
-                code_strings, begin_code_line_number  = inspect.getsourcelines(code)
+                code_strings, begin_code_line_number = inspect.getsourcelines(code)
             else:
-                code_strings, begin_code_line_number  = inspect.getsourcelines(function)
+                code_strings, begin_code_line_number = inspect.getsourcelines(function)
         except:
             return
 
@@ -99,13 +99,22 @@ class ProxyModule(sys.modules[__name__].__class__):
         ast_of_code = ast.parse(full_code)
         expected_line_number = begin_code_line_number
 
-        flag = False
+        flag = True
         class ConstantVisitor(ast.NodeVisitor):
             def visit_Call(self, node):
                 nonlocal flag
                 if node.lineno + begin_code_line_number - 1 == code_line:
-                    if len(node.args) == 1 and isinstance(node.args[0], ast.Constant):
-                        flag = True
+                    if hasattr(node.func, 'id') and node.func.id == 'f':
+                        if len(node.args) == 1 and isinstance(node.args[0], ast.Constant):
+                            flag *= True
+                        elif len(node.args) == 1 and isinstance(node.args[0], ast.Call) and hasattr(node.args[0].func, 'id') and node.args[0].func.id == 'f':
+                            flag *= True
+                            for arg in node.args:
+                                ConstantVisitor().visit(arg)
+                            for keyword in node.keywords:
+                                ConstantVisitor().visit(keyword.value)
+                        else:
+                            flag *= False
                     elif isinstance(node.func, ast.Attribute):
                         ConstantVisitor().visit(node.func.value)
                         for arg in node.args:

@@ -14,6 +14,7 @@ Lazy f-strings are the holy grail of Python development. Now it is found.
 ## Table of contents
 
 - [**Quick start**](#quick-start)
+- [**Additional features**](#additional-features)
 - [**The problem**](#the-problem)
 - [**How does it work?**](#how-does-it-work)
 - [**Limitations**](#limitations)
@@ -34,9 +35,45 @@ And use:
 >>> import f
 >>>
 >>> number = 33
->>> print(f('{number} kittens drink milk'))
-33 kittens drink milk
+>>> f('{number} kittens drink milk')
+'33 kittens drink milk'
 ```
+
+## Additional features
+
+You can execute the string not in lazy mode:
+
+```python
+>>> f('{number} kittens drink milk', lazy=False)
+'33 kittens drink milk'
+```
+
+By default, you cannot use variables as templates. When you try to do this, you will see an `SyntaxError` (the example will not work in REPL and in the global scope, that's why you don't see `>>>`):
+
+```python
+def function():
+    number = 33
+    template = '{number} kittens drink milk'
+    print(f(template))
+
+function()
+# SyntaxError: Unsafe use of a variable as a template.
+```
+
+However, you can disable this check:
+
+```python
+template = '{number} kittens drink milk'
+f(template, safe=False)
+```
+
+All scopes of variable names are available to you, including variables declared in closures. If you disable data extraction from closures, you can greatly speed up the execution of the function:
+
+```python
+>>> f('{number} kittens drink milk', closures=False)
+'33 kittens drink milk'
+```
+
 
 ## The problem
 
@@ -117,6 +154,8 @@ There are 3 scopes of variable names that are extracted from the call stack to a
 
 As you might guess from the size of the description, the most interesting type of scopes is the third - intermediate variables. The expected approach to determine the nesting of functions is an analysis of the source code. However, compiling a large amount of source code just to figure out which function wraps another one would be too costly. Therefore, in this case, a hack is used based on knowledge of how memory management occurs inside the interpreter. The fact is that the garbage collector knows about all the objects that exist in memory, as well as about the links between them. The function in which a particular frame of the call stack is executed can be found by requesting from the gc all objects containing references to it. After retrieving the function object, you can determine whether it is the parent of the currently executed one. To do this, you just need to compare their full names (qualnames) stored in the metadata of the functions.
 
+Another couple of words deserves a description of protection from a call with a template in the form of a variable. As you could already understand from the description above, by default you can call the function `f` only with a string literal as an argument. This is necessary to protect the string from attacks that allow arbitrary code to be executed. Checking whether a string is a literal and not a variable is performed by analyzing an abstract syntax tree (AST). Through the stack, we find the function in which the code is currently running. Next, we analyze this code in search of situations where the function `f` is called without a literal as an argument. If such a situation occurs at least 1 time in the line in which the code is currently being executed, we raise `SyntaxError`. However, it should be borne in mind that this protection cannot work in REPL, because there are difficulties in extracting the source code of the function for AST analysis. There were also problems with how to extract data about the module in which the code is executed, so the protection will not work in the global scope either.
+
 
 ## Limitations
 
@@ -161,9 +200,9 @@ for number in range(10000):
 print(perf_counter() - t1)
 ```
 
-On my computer (a MacBook Pro with an Apple M1 Pro processor), the execution of this code takes about 2.4 seconds, that is, about **0.00024 seconds for 1 iteration**. However, if I replace `str(f('the number is {number}'))` with `str(f'the number is {number}')`, the execution time will be 0.0022 seconds, about **0.00000022 seconds for 1 iteration**.
+On my computer (a MacBook Pro with an Apple M1 Pro processor), the execution of this code takes about 2 seconds, that is, about **0.0002 seconds for 1 iteration**. However, if I replace `str(f('the number is {number}'))` with `str(f'the number is {number}')`, the execution time will be 0.0022 seconds, about **0.00000022 seconds for 1 iteration**.
 
-> So, the original f-strings in this case turned out to be more than **1000 times faster**.
+> So, the original f-strings in this case turned out to be about **1000 times faster**.
 
 However, this does not mean that f-strings are faster in all cases. In real use, you should consider how fast the expressions that you insert into the f-strings are evaluated. If this is significantly slower than actually required for extrapolation, saving on deferred extrapolation may make sense.
 

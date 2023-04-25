@@ -196,3 +196,15 @@ def test_open_file():
             file.write('kek')
         with open(full_path, f('r')) as file:
             assert file.read() == 'kek'
+
+
+@pytest.mark.skip(reason="I can't get the source code from the global scope.")
+def test_string_as_variable_when_safe_mode_into_exec():
+    with pytest.raises(SyntaxError):
+        exec("import f;string = 'kek';f(string)")
+
+
+@pytest.mark.skip(reason="I can't get the source code from the global scope.")
+def test_string_as_variable_when_safe_mode_into_exec_with_print():
+    with pytest.raises(SyntaxError):
+        exec("import f;string = 'kek';print(f(string))")

@@ -204,7 +204,7 @@ def test_string_as_variable_when_safe_mode_into_exec():
         exec("import f;string = 'kek';f(string)")
 
 
-@pytest.mark.skip(reason="I can't get the source code from the global scope.")
+#@pytest.mark.skip(reason="I can't get the source code from the global scope.")
 def test_string_as_variable_when_safe_mode_into_exec_with_print():
     with pytest.raises(SyntaxError):
         exec("import f;string = 'kek';print(f(string))")

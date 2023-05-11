@@ -85,6 +85,8 @@ class ProxyModule(sys.modules[__name__].__class__):
             else:
                 code_strings, begin_code_line_number = inspect.getsourcelines(function)
         except:
+            print(inspect.getsourcefile(function))
+            print(inspect.getsourcefile(code))
             return
 
         spaces_count = 0

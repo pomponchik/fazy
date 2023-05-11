@@ -85,8 +85,6 @@ class ProxyModule(sys.modules[__name__].__class__):
             else:
                 code_strings, begin_code_line_number = inspect.getsourcelines(function)
         except:
-            print(inspect.getsourcefile(function))
-            print(inspect.getsourcefile(code))
             return
 
         spaces_count = 0
@@ -131,7 +129,7 @@ class ProxyModule(sys.modules[__name__].__class__):
 
         ConstantVisitor().visit(ast_of_code)
 
-        if not flag:
+        if not flag and not (sys.version_info < (3, 8)):
             raise SyntaxError('Unsafe use of a variable as a template.')
 
 

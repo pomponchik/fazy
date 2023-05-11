@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from io import StringIO
 from contextlib import redirect_stdout
@@ -299,6 +300,7 @@ def test_raise_if_closures_when_no_closures_mode():
         assert wrapper()()
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
 def test_string_as_variable_when_safe_mode():
     # default mode is True
     with pytest.raises(SyntaxError):
@@ -310,6 +312,7 @@ def test_string_as_variable_when_safe_mode():
         f(string, safe=True)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
 def test_string_as_variable_when_safe_mode_into_generator_function():
     def generator():
         string = 'kek'
@@ -320,11 +323,13 @@ def test_string_as_variable_when_safe_mode_into_generator_function():
             pass
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
 def test_string_as_variable_when_safe_mode_into_generator_expression():
     with pytest.raises(SyntaxError):
         list(f(string) for string in ['lol', 'kek'])
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
 def test_string_as_variable_when_safe_mode_into_double_strings_generator_expression():
     with pytest.raises(SyntaxError):
         list((f(string), f('kek')) for string in ['lol', 'kek'])

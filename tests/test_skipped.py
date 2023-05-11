@@ -205,6 +205,7 @@ def test_string_as_variable_when_safe_mode_into_exec():
 
 
 #@pytest.mark.skip(reason="I can't get the source code from the global scope.")
+@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
 def test_string_as_variable_when_safe_mode_into_exec_with_print():
     with pytest.raises(SyntaxError):
         exec("import f;string = 'kek';print(f(string))")

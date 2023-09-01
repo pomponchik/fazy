@@ -1,7 +1,7 @@
 # FAZY: lazy f-strings for everyone
 
-[![Downloads](https://pepy.tech/badge/fazy/month)](https://pepy.tech/project/fazy)
-[![Downloads](https://pepy.tech/badge/fazy)](https://pepy.tech/project/fazy)
+[![Downloads](https://static.pepy.tech/badge/fazy/month)](https://pepy.tech/project/fazy)
+[![Downloads](https://static.pepy.tech/badge/fazy)](https://pepy.tech/project/fazy)
 [![codecov](https://codecov.io/gh/pomponchik/fazy/branch/main/graph/badge.svg)](https://codecov.io/gh/pomponchik/fazy)
 [![Test-Package](https://github.com/pomponchik/fazy/actions/workflows/coverage.yml/badge.svg)](https://github.com/pomponchik/fazy/actions/workflows/coverage.yml)
 [![PyPI version](https://badge.fury.io/py/fazy.svg)](https://badge.fury.io/py/fazy)

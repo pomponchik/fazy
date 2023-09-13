@@ -7,7 +7,7 @@ requirements = []
 
 setup(
     name='fazy',
-    version='0.0.5',
+    version='0.0.6',
     author='Evgeniy Blinov',
     author_email='zheni-b@yandex.ru',
     description='Lazy f-strings for everyone',

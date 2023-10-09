@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/pomponchik/fazy/develop/docs/assets/logo_2.png)
+![logo](https://raw.githubusercontent.com/pomponchik/fazy/develop/docs/assets/logo_3.png)
 
 [![Downloads](https://static.pepy.tech/badge/fazy/month)](https://pepy.tech/project/fazy)
 [![Downloads](https://static.pepy.tech/badge/fazy)](https://pepy.tech/project/fazy)

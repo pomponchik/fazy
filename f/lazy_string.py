@@ -15,7 +15,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
         self.lazy: bool = lazy
         self.result: Optional[str] = None
 
-    def __new__(cls, *args, **kwargs) -> 'LazyString':
+    def __new__(cls, *args: Any, **kwargs: Any) -> 'LazyString':
         return str.__new__(cls)
 
     def __add__(self, other: Union['LazyString', str]) -> str:

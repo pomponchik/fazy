@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf8') as readme_file:
 
 requirements = []
 if sys.version_info < (3, 8):
-    requirements.append('typing-extensions==4.8.0')
+    requirements.append('typing-extensions==4.1.0')
 
 setup(
     name='fazy',

@@ -8,7 +8,7 @@ from typing import Iterable, Optional, Union, Sized, Dict, Callable, Type, Any
 try:
     from typing import Protocol
 except ImportError:
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol  # type: ignore[assignment]
 
 from f.chain_unit import ChainUnit
 from f.lazy_string import LazyString

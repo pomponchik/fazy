@@ -6,6 +6,7 @@
 [![Test-Package](https://github.com/pomponchik/fazy/actions/workflows/coverage.yml/badge.svg)](https://github.com/pomponchik/fazy/actions/workflows/coverage.yml)
 [![PyPI version](https://badge.fury.io/py/fazy.svg)](https://badge.fury.io/py/fazy)
 [![Python versions](https://img.shields.io/pypi/pyversions/fazy.svg)](https://pypi.python.org/pypi/fazy)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 

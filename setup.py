@@ -1,13 +1,16 @@
+import sys
 from setuptools import setup, find_packages
 
 with open('README.md', 'r', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
 requirements = []
+if sys.version_info < (3, 8):
+    requirements.append('typing-extensions==4.1.0')
 
 setup(
     name='fazy',
-    version='0.0.7',
+    version='0.0.8',
     author='Evgeniy Blinov',
     author_email='zheni-b@yandex.ru',
     description='Lazy f-strings for everyone',

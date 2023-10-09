@@ -3,17 +3,21 @@ import sys
 import ast
 import inspect
 from string import Formatter
-from types import CodeType
-from typing import Iterable, Optional, Union, Sized, Dict, Callable, Any
+from types import CodeType, FrameType
+from typing import Iterable, Optional, Union, Sized, Dict, Callable, Type, Any
+try:
+    from typing import Protocol
+except ImportError:
+    from typing_extensions import Protocol  # type: ignore[assignment]
 
 from f.chain_unit import ChainUnit
 from f.lazy_string import LazyString
 
 
-class SizedAndIterable(Sized, Iterable[Any]):
+class SizedAndIterable(Sized, Iterable[Any], Protocol):
     pass
 
-class ProxyModule(sys.modules[__name__].__class__):
+class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
     old_str = str
 
     def __call__(self, string: Union[LazyString, str], lazy: bool = True, safe: bool = True, closures: bool = True) -> Union[LazyString, str]:
@@ -39,7 +43,7 @@ class ProxyModule(sys.modules[__name__].__class__):
             return result
         return result.data
 
-    def sum_of_nonlocals(self, first_frame, base_qualname, closures, safe) -> Dict[str, Any]:
+    def sum_of_nonlocals(self, first_frame: Optional[FrameType], base_qualname: Optional[str], closures: bool, safe: bool) -> Dict[str, Any]:
         if not closures or first_frame is None or base_qualname is None:
             return {}
 
@@ -64,7 +68,7 @@ class ProxyModule(sys.modules[__name__].__class__):
         return result
 
     @classmethod
-    def get_qualname(cls: type, code: CodeType, raise_if_not_literal: bool, code_line: int) -> Optional[str]:
+    def get_qualname(cls: Type['ProxyModule'], code: CodeType, raise_if_not_literal: bool, code_line: int) -> Optional[str]:
         functions = []
 
         for function in gc.get_referrers(code):
@@ -80,7 +84,7 @@ class ProxyModule(sys.modules[__name__].__class__):
             function = functions[0]
             if raise_if_not_literal:
                 cls.check_code(function, code, code_line)
-            return function.__qualname__
+            return function.__qualname__  # type: ignore[no-any-return]
 
     @staticmethod
     def check_code(function: Callable[..., Any], code: CodeType, code_line: int) -> None:
@@ -103,9 +107,9 @@ class ProxyModule(sys.modules[__name__].__class__):
         full_code = ''.join(code_strings)
         ast_of_code = ast.parse(full_code)
 
-        flag = True
+        flag: Union[int, bool] = True
         class ConstantVisitor(ast.NodeVisitor):
-            def visit_Call(self, node) -> None:
+            def visit_Call(self, node: ast.Call) -> None:
                 nonlocal flag
                 if node.lineno + begin_code_line_number - 1 == code_line:
                     if hasattr(node.func, 'id') and node.func.id == 'f':

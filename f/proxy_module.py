@@ -80,7 +80,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
             function = functions[0]
             if raise_if_not_literal:
                 cls.check_code(function, code, code_line)
-            return function.__qualname__
+            return function.__qualname__  # type: ignore[no-any-return]
 
     @staticmethod
     def check_code(function: Callable[..., Any], code: CodeType, code_line: int) -> None:

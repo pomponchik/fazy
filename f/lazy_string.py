@@ -93,11 +93,12 @@ class LazyString(UserString, str):  # type: ignore[misc]
     def title(self) -> str:
         return self.data.title()
 
-    def startswith(self, prefix: Union['LazyString', str], *other_args: Union['LazyString', str]) -> bool:
+    def startswith(self, prefix: Union['LazyString', str, Tuple[Union['LazyString', str], ...]], *other_args: int) -> bool:
         if isinstance(prefix, type(self)):
             prefix = prefix.data
-        converted_other_args = [x if not isinstance(x, type(self)) else x.data for x in other_args]
-        return self.data.startswith(prefix, *converted_other_args)
+        elif isinstance(prefix, tuple):
+            prefix = tuple(*(x.data if isinstance(x, type(self)) else x for x in prefix))
+        return self.data.startswith(prefix, *other_args)
 
     def endswith(self, suffix: Union['LazyString', str, Tuple[Union['LazyString', str], ...]], *other_args: int) -> bool:
         if isinstance(suffix, type(self)):
@@ -179,7 +180,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
             value = value.data if isinstance(value, UserString) else value
             first_item[key] = value
 
-        return str.maketrans(first_item, *converted_others)
+        return str.maketrans(first_item, *converted_others)  # type: ignore[arg-type]
 
     def partition(self, sep: Union['LazyString', str]) -> Tuple[str, str, str]:
         sep = sep.data if isinstance(sep, type(self)) else sep

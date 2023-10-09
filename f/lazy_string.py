@@ -32,7 +32,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
     def __getnewargs__(self) -> Tuple[List[ChainUnit], Dict[str, Any], Dict[str, Any], Dict[str, Any], bool]:
         return (self.units, self.local_locals, self.local_globals, self.local_nonlocals, self.lazy)
 
-    def __mod__(self, args) -> str:
+    def __mod__(self, args: Union[str, Tuple[Any, ...]]) -> str:
         if isinstance(args, type(self)):
             args = args.data
         return self.data.__mod__(args)

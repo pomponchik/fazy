@@ -1,9 +1,12 @@
+import sys
 from setuptools import setup, find_packages
 
 with open('README.md', 'r', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
 requirements = []
+if sys.version_info < (3, 8):
+    requirements.append('typing-extensions==4.8.0')
 
 setup(
     name='fazy',

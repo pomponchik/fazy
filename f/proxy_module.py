@@ -4,7 +4,11 @@ import ast
 import inspect
 from string import Formatter
 from types import CodeType, FrameType
-from typing import Iterable, Optional, Union, Sized, Dict, Callable, Type, Protocol, Any
+from typing import Iterable, Optional, Union, Sized, Dict, Callable, Type, Any
+try:
+    from typing import Protocol
+except ImportError:
+    from typing_extensions import Protocol
 
 from f.chain_unit import ChainUnit
 from f.lazy_string import LazyString

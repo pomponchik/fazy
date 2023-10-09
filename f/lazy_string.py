@@ -153,13 +153,13 @@ class LazyString(UserString, str):  # type: ignore[misc]
             chars = chars.data
         return self.data.rstrip(chars)
 
-    def ljust(self, width, *args):
-        args = [item.data if isinstance(item, type(self)) else item for item in args]
-        return self.data.ljust(width, *args)
+    def ljust(self, width: int, *args: Union['LazyString', str]) -> str:
+        converted_args = [item.data if isinstance(item, type(self)) else item for item in args]
+        return self.data.ljust(width, *converted_args)
 
-    def rjust(self, width, *args):
-        args = [item.data if isinstance(item, type(self)) else item for item in args]
-        return self.data.rjust(width, *args)
+    def rjust(self, width: int, *args: Union['LazyString', str]) -> str:
+        converted_args = [item.data if isinstance(item, type(self)) else item for item in args]
+        return self.data.rjust(width, *converted_args)
 
     def encode(self, **kwargs: Union['LazyString', str]) -> bytes:
         kwargs = {key: value.data if isinstance(value, type(self)) else value for key, value in kwargs.items()}

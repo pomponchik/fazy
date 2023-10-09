@@ -10,7 +10,7 @@ if sys.version_info < (3, 8):
 
 setup(
     name='fazy',
-    version='0.0.7',
+    version='0.0.8',
     author='Evgeniy Blinov',
     author_email='zheni-b@yandex.ru',
     description='Lazy f-strings for everyone',

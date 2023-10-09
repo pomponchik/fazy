@@ -3,15 +3,20 @@ import sys
 import ast
 import inspect
 from string import Formatter
+from types import CodeType
+from typing import Iterable, Optional, Union, Sized, Dict, Callable, Any
 
 from f.chain_unit import ChainUnit
 from f.lazy_string import LazyString
 
 
+class SizedAndIterable(Sized, Iterable[Any]):
+    pass
+
 class ProxyModule(sys.modules[__name__].__class__):
     old_str = str
 
-    def __call__(self, string, lazy=True, safe=True, closures=True):
+    def __call__(self, string: Union[LazyString, str], lazy: bool = True, safe: bool = True, closures: bool = True) -> Union[LazyString, str]:
         if isinstance(string, LazyString):
             return string
 
@@ -34,7 +39,7 @@ class ProxyModule(sys.modules[__name__].__class__):
             return result
         return result.data
 
-    def sum_of_nonlocals(self, first_frame, base_qualname, closures, safe):
+    def sum_of_nonlocals(self, first_frame, base_qualname, closures, safe) -> Dict[str, Any]:
         if not closures or first_frame is None or base_qualname is None:
             return {}
 
@@ -59,7 +64,7 @@ class ProxyModule(sys.modules[__name__].__class__):
         return result
 
     @classmethod
-    def get_qualname(cls, code, raise_if_not_literal, code_line):
+    def get_qualname(cls: type, code: CodeType, raise_if_not_literal: bool, code_line: int) -> Optional[str]:
         functions = []
 
         for function in gc.get_referrers(code):
@@ -78,7 +83,7 @@ class ProxyModule(sys.modules[__name__].__class__):
             return function.__qualname__
 
     @staticmethod
-    def check_code(function, code, code_line):
+    def check_code(function: Callable[..., Any], code: CodeType, code_line: int) -> None:
         try:
             if inspect.isgenerator(function):
                 code_strings, begin_code_line_number = inspect.getsourcelines(code)
@@ -100,7 +105,7 @@ class ProxyModule(sys.modules[__name__].__class__):
 
         flag = True
         class ConstantVisitor(ast.NodeVisitor):
-            def visit_Call(self, node):
+            def visit_Call(self, node) -> None:
                 nonlocal flag
                 if node.lineno + begin_code_line_number - 1 == code_line:
                     if hasattr(node.func, 'id') and node.func.id == 'f':
@@ -133,7 +138,7 @@ class ProxyModule(sys.modules[__name__].__class__):
 
 
     @staticmethod
-    def startswith(iterable, second_iterable):
+    def startswith(iterable: SizedAndIterable, second_iterable: SizedAndIterable) -> bool:
         if len(iterable) < len(second_iterable):
             return False
 
@@ -143,8 +148,8 @@ class ProxyModule(sys.modules[__name__].__class__):
 
         return True
 
-    def __str__(self):
+    def __str__(self) -> str:
         return 'f'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'f'

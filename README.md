@@ -1,4 +1,4 @@
-# FAZY: lazy f-strings for everyone
+![logo](https://raw.githubusercontent.com/pomponchik/fazy/develop/docs/assets/logo_3.png)
 
 [![Downloads](https://static.pepy.tech/badge/fazy/month)](https://pepy.tech/project/fazy)
 [![Downloads](https://static.pepy.tech/badge/fazy)](https://pepy.tech/project/fazy)
@@ -6,6 +6,7 @@
 [![Test-Package](https://github.com/pomponchik/fazy/actions/workflows/coverage.yml/badge.svg)](https://github.com/pomponchik/fazy/actions/workflows/coverage.yml)
 [![PyPI version](https://badge.fury.io/py/fazy.svg)](https://badge.fury.io/py/fazy)
 [![Python versions](https://img.shields.io/pypi/pyversions/fazy.svg)](https://pypi.python.org/pypi/fazy)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 
 Lazy f-strings are the holy grail of Python development. Now it is found.

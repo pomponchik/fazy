@@ -120,7 +120,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
         converted_others = [other.data if isinstance(other, type(self)) else other for other in others]
         return self.data.center(width, *converted_others)
 
-    def join(self, iterable: Iterable[str]) -> str:
+    def join(self, iterable: Iterable[Union['LazyString', str]]) -> str:
         converted_iterable = [item.data if isinstance(item, type(self)) else item for item in iterable]
         return self.data.join(converted_iterable)
 

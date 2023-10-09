@@ -84,7 +84,7 @@ class ProxyModule(sys.modules[__name__].__class__):
                 code_strings, begin_code_line_number = inspect.getsourcelines(code)
             else:
                 code_strings, begin_code_line_number = inspect.getsourcelines(function)
-        except:
+        except Exception:
             return
 
         spaces_count = 0
@@ -97,7 +97,6 @@ class ProxyModule(sys.modules[__name__].__class__):
 
         full_code = ''.join(code_strings)
         ast_of_code = ast.parse(full_code)
-        expected_line_number = begin_code_line_number
 
         flag = True
         class ConstantVisitor(ast.NodeVisitor):

@@ -121,9 +121,6 @@ class LazyString(UserString, str):
     def capitalize(self):
         return self.data.capitalize()
 
-    def encode(self, **kwargs):
-        return self.data.encode(**kwargs)
-
     def casefold(self):
         return self.data.casefold()
 

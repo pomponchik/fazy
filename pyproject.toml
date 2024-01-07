@@ -28,6 +28,9 @@ classifiers = [
   'Topic :: Software Development :: Libraries',
 ]
 
+[tool.setuptools.package-data]
+"fazy" = ["py.typed"]
+
 [project.urls]
 'Source' = 'https://github.com/pomponchik/fazy'
 'Tracker' = 'https://github.com/pomponchik/fazy/issues'

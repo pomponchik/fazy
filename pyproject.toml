@@ -4,7 +4,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'fazy'
-version = '0.0.9'
+version = '0.0.10'
 authors = [
   { name='Evgeniy Blinov', email='zheni-b@yandex.ru' },
 ]
@@ -27,6 +27,9 @@ classifiers = [
   'Intended Audience :: Developers',
   'Topic :: Software Development :: Libraries',
 ]
+
+[tool.setuptools.package-data]
+"fazy" = ["py.typed"]
 
 [project.urls]
 'Source' = 'https://github.com/pomponchik/fazy'

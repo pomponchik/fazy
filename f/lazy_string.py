@@ -137,12 +137,12 @@ class LazyString(UserString, str):  # type: ignore[misc]
     def removeprefix(self, prefix: Union['LazyString', str]) -> str:
         if isinstance(prefix, type(self)):
             prefix = prefix.data
-        return self.data.removeprefix(prefix)
+        return self.data.removeprefix(prefix)  # type: ignore[attr-defined, no-any-return, unused-ignore]
 
     def removesuffix(self, suffix: Union['LazyString', str]) -> str:
         if isinstance(suffix, type(self)):
             suffix = suffix.data
-        return self.data.removesuffix(suffix)
+        return self.data.removesuffix(suffix)  # type: ignore[attr-defined, no-any-return, unused-ignore]
 
     def lstrip(self, chars: Optional[Union['LazyString', str]] = None) -> str:
         if isinstance(chars, type(self)):

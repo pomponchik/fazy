@@ -476,6 +476,10 @@ def test_maketrans():
     assert str.maketrans('mSa', 'eJo', 'odnght') == f('kek').maketrans(f('mSa'), f('eJo'), f('odnght'))
     assert str.maketrans('S', 'P') == f('kek').maketrans('S', 'P')
     assert str.maketrans('S', 'P') == f('kek').maketrans(f('S'), f('P'))
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({'a': 'b', 'r': 't'})
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({f('a'): 'b', f('r'): 't'})
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({'a': f('b'), 'r': f('t')})
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({f('a'): f('b'), f('r'): f('t')})
 
 
 def test_partition():

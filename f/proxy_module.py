@@ -3,11 +3,7 @@ import sys
 import inspect
 from string import Formatter
 from types import CodeType, FrameType
-from typing import Iterable, Optional, Union, Sized, Dict, Type, Any
-try:
-    from typing import Protocol
-except ImportError:
-    from typing_extensions import Protocol  # type: ignore[assignment]
+from typing import Protocol, Iterable, Optional, Union, Sized, Dict, Type, Any
 
 from f.chain_unit import ChainUnit
 from f.lazy_string import LazyString

@@ -174,17 +174,18 @@ def test_read_nonlocal_variable_nested():
         return function_2()
 
     assert function() == '{0}'.format(5)
+    assert function() == function_2()
 
     # comparing with original interpreter behavior:
-    def function_2():
+    def function_3():
         return '{0}'.format(kek)
 
-    def function():
+    def function_4():
         kek = 3  # noqa: F841
         return function_2()
 
-    assert function() == '{0}'.format(5)
-    assert function() == function_2()
+    assert function_3() == '{0}'.format(5)
+    assert function_3() == function_4()
 
 
 def test_builtins():

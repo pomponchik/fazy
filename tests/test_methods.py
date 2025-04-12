@@ -319,6 +319,10 @@ def test_startswith():
     assert f('kek').startswith(f(''))
     assert not f('kek').startswith(f('pe'))
 
+    assert f('kek').startswith(('k', 'e'))
+    assert f('kek').startswith(('',))
+    assert not f('kek').startswith(('p', 'e'))
+
 
 def test_endswith():
     # str references

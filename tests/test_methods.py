@@ -323,6 +323,10 @@ def test_startswith():
     assert f('kek').startswith(('',))
     assert not f('kek').startswith(('p', 'e'))
 
+    assert f('kek').startswith(('k', f('e')))
+    assert f('kek').startswith(('',))
+    assert not f('kek').startswith((f('p'), 'e'))
+
 
 def test_endswith():
     # str references
@@ -337,6 +341,10 @@ def test_endswith():
     assert f('kek').endswith(f('ek'))
     assert f('kek').endswith(f(''))
     assert not f('kek').endswith(f('pe'))
+
+    assert f('kek').endswith((f('e'), f('k')))
+    assert f('kek').endswith((f(''),))
+    assert not f('kek').endswith((f('p'), f('e')))
 
 
 def test_isdigit():

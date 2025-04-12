@@ -104,7 +104,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
         if isinstance(suffix, type(self)):
             suffix = suffix.data
         elif isinstance(suffix, tuple):
-            suffix = tuple(*(x.data if isinstance(x, type(self)) else x for x in suffix))
+            suffix = tuple((x.data if isinstance(x, type(self)) else x for x in suffix))
         return self.data.endswith(suffix, *other_args)
 
     def index(self, sub: Union['LazyString', str], *other: int) -> int:

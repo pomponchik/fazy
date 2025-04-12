@@ -166,13 +166,13 @@ def test_read_nonlocal_variable_difficult():
 
 
 def test_read_nonlocal_variable_nested():
-    kek = 5
+    kek = 5  # noqa: F841
 
     def function_2():
         return f('{kek}')
 
     def function():
-        kek = 3
+        kek = 3  # noqa: F841
         return function_2()
 
     assert function() == '{0}'.format(5)
@@ -182,7 +182,7 @@ def test_read_nonlocal_variable_nested():
         return '{0}'.format(kek)
 
     def function():
-        kek = 3
+        kek = 3  # noqa: F841
         return function_2()
 
     assert function() == '{0}'.format(5)
@@ -279,7 +279,7 @@ def test_not_lazy_mode():
 
 
 def test_no_closures_mode_base_working():
-    number = 5
+    number = 5  # noqa: F841
 
     assert f('kek', closures=False) == 'kek'
     assert f('kek {number}', closures=False) == 'kek 5'

@@ -79,8 +79,6 @@ def test_lazyness():
 
     accumulator.pop()
 
-    some_object = SomeClass()
-
     lazy_string = f('{SomeClass()}')
 
     assert len(accumulator) == 0
@@ -95,7 +93,7 @@ def test_lazyness():
 
 
 def test_not_lazy():
-    number = 5
+    number = 5  # noqa: F841
 
     assert type(f('kek', lazy=False)) is str
     assert type(f('{number}', lazy=False)) is str
@@ -269,7 +267,7 @@ def test_genexprs():
 
 
 def test_not_lazy_mode():
-    number = 33
+    number = 33  # noqa: F841
 
     assert f('kek', lazy=False) == 'kek'
     assert f('kek {number}', lazy=False) == 'kek 33'

@@ -67,7 +67,7 @@ def test_dunder_contains():
 
 
 def test_dunder_len():
-    kek = '1234567890'
+    kek = '1234567890'  # noqa: F841
 
     assert len(f('lol')) == 3
     assert len(f('{kek}')) == 10

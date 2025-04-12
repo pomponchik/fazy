@@ -1,5 +1,4 @@
 import os
-import sys
 import logging
 from io import StringIO
 from contextlib import redirect_stdout
@@ -39,7 +38,7 @@ def test_globals_and_locals_intersection():
 
 
 def test_complex_string():
-    kek = 'kek?'
+    kek = 'kek?'  # noqa: F841
 
     assert f('lol {kek} {"cheburek"} {GLOBAL_VARIABLE} {2} {False}') == 'lol kek? cheburek kek 2 False'
 

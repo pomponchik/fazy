@@ -17,7 +17,7 @@ def test_basic():
 
 
 def test_basic_capturing_variables():
-    kek = 'kek'
+    kek = 'kek'  # noqa: F841
 
     assert f('{kek}') == 'kek'
     assert f('{kek}') != 'lol'
@@ -184,6 +184,7 @@ def test_read_nonlocal_variable_nested():
         return function_2()
 
     assert function() == '{0}'.format(5)
+    assert function() == function_2()
 
 
 def test_builtins():

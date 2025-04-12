@@ -287,10 +287,10 @@ def test_no_closures_mode_base_working():
 
 
 def test_raise_if_closures_when_no_closures_mode():
-    number_1 = 5
+    number_1 = 5  # noqa: F841
 
     def wrapper():
-        number_2 = 10
+        number_2 = 10  # noqa: F841
         def wrapped():
             return f('kek {number_1} {number_2}', closures=False)
         return wrapped

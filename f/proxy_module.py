@@ -3,7 +3,7 @@ import sys
 import inspect
 from string import Formatter
 from types import CodeType, FrameType
-from typing import Set, Iterable, Optional, Union, Sized, Dict, Callable, Type, Any
+from typing import Iterable, Optional, Union, Sized, Dict, Type, Any
 try:
     from typing import Protocol
 except ImportError:

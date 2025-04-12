@@ -97,7 +97,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
         if isinstance(prefix, type(self)):
             prefix = prefix.data
         elif isinstance(prefix, tuple):
-            prefix = tuple(*(x.data if isinstance(x, type(self)) else x for x in prefix))
+            prefix = tuple((x.data if isinstance(x, type(self)) else x for x in prefix))
         return self.data.startswith(prefix, *other_args)
 
     def endswith(self, suffix: Union['LazyString', str, Tuple[Union['LazyString', str], ...]], *other_args: int) -> bool:

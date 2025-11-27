@@ -251,6 +251,7 @@ def test_logging_to_file():
 
     with open(file_name, 'r') as file:
         content = file.read()
+        print(repr(content))
         assert content == 'kek\n'
 
     try:

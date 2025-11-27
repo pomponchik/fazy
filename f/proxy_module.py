@@ -80,7 +80,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
             if maybe_code is not None:
                 functions.append(function)
 
-        if functions:
+        if functions:  # pragma: no cover
             function = functions[0]
             return function.__qualname__  # type: ignore[no-any-return]
 

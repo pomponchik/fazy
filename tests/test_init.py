@@ -222,7 +222,6 @@ def test_lazy_syntax_error():
         str(f('{a..}'))
 
 
-@pytest.mark.skip
 def test_logging():
     class ListHandler(logging.Handler):
         def __init__(self, log_list):
@@ -245,6 +244,10 @@ def test_logging():
 
 
 def test_logging_to_file():
+    with open(file_name, 'r') as file:
+        content = file.read()
+        print(repr(content))
+
     file_name = os.path.join('tests', 'data', 'file.log')
     logging.root.addHandler(logging.FileHandler(file_name))
 

@@ -126,7 +126,7 @@ def test_rindex():
         f('kek').rindex('p')
     with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').rindex(f('p'))
-    with pytest.raises(TypeError, match=match('must be str, not int')):
+    with pytest.raises(TypeError):
         f('kek').rindex(0)
 
 

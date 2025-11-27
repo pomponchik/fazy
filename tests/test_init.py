@@ -248,6 +248,10 @@ def test_logging_to_file():
     file_name = os.path.join('tests', 'data', 'file.log')
     logging.root.addHandler(logging.FileHandler(file_name))
 
+    with open(file_name, 'r') as file:
+        content = file.read()
+        print(repr(content))
+
     logging.error(f('kek'))
 
     with open(file_name, 'r') as file:

@@ -134,12 +134,12 @@ class LazyString(UserString, str):  # type: ignore[misc]
     def expandtabs(self, tabsize: int = 8) -> str:
         return self.data.expandtabs(tabsize)
 
-    def removeprefix(self, prefix: Union['LazyString', str]) -> str:
+    def removeprefix(self, prefix: Union['LazyString', str]) -> str:  # pragma: no cover
         if isinstance(prefix, type(self)):
             prefix = prefix.data
         return self.data.removeprefix(prefix)  # type: ignore[attr-defined, no-any-return, unused-ignore]
 
-    def removesuffix(self, suffix: Union['LazyString', str]) -> str:
+    def removesuffix(self, suffix: Union['LazyString', str]) -> str:  # pragma: no cover
         if isinstance(suffix, type(self)):
             suffix = suffix.data
         return self.data.removesuffix(suffix)  # type: ignore[attr-defined, no-any-return, unused-ignore]

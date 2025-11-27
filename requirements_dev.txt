@@ -1,8 +1,8 @@
-pytest==7.4.3
+pytest==8.0.2
 coverage==7.6.1
 wheel==0.40.0
 twine==6.1.0
 build==1.2.2.post1
-ruff==0.9.9
+ruff==0.14.6
 mypy==1.14.1
 mutmut==3.2.3

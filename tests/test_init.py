@@ -296,3 +296,10 @@ def test_raise_if_closures_when_no_closures_mode():
 
     with pytest.raises(NameError):
         assert wrapper()()
+
+
+def test_just_simple_exec():
+    globals_for_module = {}
+    exec('import f; a = f("kek")', globals_for_module)
+
+    assert globals_for_module['a'] == f('kek')

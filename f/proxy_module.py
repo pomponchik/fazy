@@ -22,7 +22,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
         base_frame = inspect.stack(0)[1].frame
 
         result = LazyString(
-            [ChainUnit(base=x[0], appendix=x[1], lazy=lazy) for x in Formatter().parse(string)],
+            [ChainUnit(base=x[0], appendix=x[1]) for x in Formatter().parse(string)],
             {**base_frame.f_locals},
             {**base_frame.f_globals},
             self.sum_of_nonlocals(

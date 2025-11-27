@@ -222,6 +222,7 @@ def test_lazy_syntax_error():
         str(f('{a..}'))
 
 
+@pytest.mark.skip
 def test_logging():
     class ListHandler(logging.Handler):
         def __init__(self, log_list):

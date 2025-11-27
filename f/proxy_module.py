@@ -52,7 +52,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
             code = first_frame.f_code
 
             qualname = self.get_qualname(code)
-            if qualname is not None:
+            if qualname is not None:  # pragma: no cover
                 if self.startswith(base_qualname.split('.'), qualname.split('.')):
                     all_locals.append(first_frame.f_locals)
 

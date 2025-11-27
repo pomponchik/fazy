@@ -1,12 +1,11 @@
-import os
 import logging
-from io import StringIO
+import os
 from contextlib import redirect_stdout
+from io import StringIO
 
 import pytest
 
 import f
-
 
 GLOBAL_VARIABLE = 'kek'
 
@@ -29,7 +28,7 @@ def test_basic_capturing_global_variables():
 
 
 def test_globals_and_locals_intersection():
-    GLOBAL_VARIABLE = 'lol'
+    GLOBAL_VARIABLE = 'lol'  # noqa: N806
 
     assert f('{GLOBAL_VARIABLE}') == 'lol'
     assert f('{GLOBAL_VARIABLE}') == '{0}'.format(GLOBAL_VARIABLE)
@@ -75,7 +74,7 @@ def test_lazyness():
             return 'kek'
 
     assert f('{SomeClass()}') == 'kek'
-    len(accumulator) == 1
+    assert len(accumulator) == 1
 
     accumulator.pop()
 
@@ -164,7 +163,7 @@ def test_read_nonlocal_variable_difficult():
 
 
 def test_read_nonlocal_variable_nested():
-    kek = 5  # noqa: F841
+    kek = 5
 
     def function_2():
         return f('{kek}')
@@ -201,7 +200,7 @@ def test_modules_startswith():
 
 def test_print():
     with redirect_stdout(StringIO()) as context:
-        print(f('kek'))
+        print(f('kek'))  # noqa: T201
 
     assert context.getvalue() == 'kek\n'
 

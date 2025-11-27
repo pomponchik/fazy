@@ -1,6 +1,7 @@
 import sys
 
 import pytest
+from full_match import match
 
 import f
 
@@ -22,17 +23,16 @@ def test_dunder_repr():
 def test_dunder_eq():
     lazy_string = f('kek')
 
-    assert lazy_string == lazy_string
+    assert lazy_string == lazy_string  # noqa: PLR0124
     assert f('kek') == f('kek')
 
     assert lazy_string == 'kek'
     assert lazy_string != 'no kek'
 
-    assert 'kek' == lazy_string
-    assert 'no kek' != lazy_string
+    assert lazy_string == 'kek'
+    assert lazy_string != 'no kek'
 
     assert f('e') == 'e'
-    assert 'e' == f('e')
 
 
 def test_dunder_add_and_radd():
@@ -45,13 +45,8 @@ def test_dunder_add_and_radd():
 
     assert f('lol') + f('kek') != f('not lolkek')
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match=match('can only concatenate str (not "int") to str')):
         f('lol') + 5
-
-    try:
-        f('lol') + 5
-    except TypeError as e:
-        assert str(e) == 'can only concatenate str (not "int") to str'
 
 
 def test_dunder_contains():
@@ -99,93 +94,93 @@ def test_dunder_getnewargs():
 
 
 def test_dunder_ge():
-    assert '1234' >= '123'
+    assert '1234' >= '123'  # noqa: PLR0133
     assert f('1234') >= '123'
     assert f('1234') >= f('123')
-    assert '1234' >= f('123')
+    assert f('123') <= '1234'
 
-    assert '1234' >= '1234'
+    assert '1234' >= '1234'  # noqa: PLR0133
     assert f('1234') >= '1234'
     assert f('1234') >= f('1234')
-    assert '1234' >= f('1234')
+    assert f('1234') <= '1234'
 
-    assert not ('1234' >= '12345')
+    assert not ('1234' >= '12345')  # noqa: PLR0133
     assert not (f('1234') >= '12345')
     assert not (f('1234') >= f('12345'))
-    assert not ('1234' >= f('12345'))
+    assert not (f('12345') <= '1234')
 
     with pytest.raises(TypeError):
-        f('1234') >= 12345
+        f('1234') >= 12345  # noqa: B015
 
 
 def test_dunder_gt():
-    assert '1234' > '123'
+    assert '1234' > '123'  # noqa: PLR0133
     assert f('1234') > '123'
     assert f('1234') > f('123')
-    assert '1234' > f('123')
+    assert f('123') < '1234'
 
-    assert not ('1234' > '1234')
+    assert not ('1234' > '1234')  # noqa: PLR0133
     assert not (f('1234') > '1234')
     assert not (f('1234') > f('1234'))
-    assert not ('1234' > f('1234'))
+    assert not (f('1234') < '1234')
 
-    assert not ('1234' > '12345')
+    assert not ('1234' > '12345')  # noqa: PLR0133
     assert not (f('1234') > '12345')
     assert not (f('1234') > f('12345'))
-    assert not ('1234' > f('12345'))
+    assert not (f('12345') < '1234')
 
     with pytest.raises(TypeError):
-        f('1234') > 12345
+        f('1234') > 12345  # noqa: B015
 
 
 def test_dunder_le():
-    assert '123' <= '1234'
+    assert '123' <= '1234'  # noqa: PLR0133
     assert f('123') <= '1234'
     assert f('123') <= f('1234')
-    assert '123' <= f('1234')
+    assert f('1234') >= '123'
 
-    assert '1234' <= '1234'
+    assert '1234' <= '1234'  # noqa: PLR0133
     assert f('1234') <= '1234'
     assert f('1234') <= f('1234')
-    assert '1234' <= f('1234')
+    assert f('1234') >= '1234'
 
-    assert not ('12345' <= '1234')
+    assert not ('12345' <= '1234')  # noqa: PLR0133
     assert not (f('12345') <= '1234')
     assert not (f('12345') <= f('1234'))
-    assert not ('12345' <= f('1234'))
+    assert not (f('1234') >= '12345')
 
     with pytest.raises(TypeError):
-        f('1234') <= 12345
+        f('1234') <= 12345  # noqa: B015
 
 
 def test_dunder_lt():
-    assert '123' < '1234'
+    assert '123' < '1234'  # noqa: PLR0133
     assert f('123') < '1234'
     assert f('123') < f('1234')
-    assert '123' < f('1234')
+    assert f('1234') > '123'
 
-    assert not ('12345' < '1234')
+    assert not ('12345' < '1234')  # noqa: PLR0133
     assert not (f('12345') < '1234')
     assert not (f('12345') < f('1234'))
-    assert not ('12345' < f('1234'))
+    assert not (f('1234') > '12345')
 
     with pytest.raises(TypeError):
-        f('1234') < 12345
+        f('1234') < 12345  # noqa: B015
 
 
 def test_dunder_ne():
-    assert '123' != '1234'
+    assert '123' != '1234'  # noqa: PLR0133
     assert f('123') != '1234'
     assert f('123') != f('1234')
-    assert '123' != f('1234')
+    assert f('1234') != '123'
 
-    assert not ('1234' != '1234')
-    assert not (f('1234') != '1234')
-    assert not (f('1234') != f('1234'))
-    assert not ('1234' != f('1234'))
+    assert not ('1234' != '1234')  # noqa: PLR0133, SIM202
+    assert not (f('1234') != '1234')  # noqa: SIM202
+    assert not (f('1234') != f('1234'))  # noqa: SIM202
+    assert not (f('1234') != '1234')  # noqa: SIM202
 
     assert f('1234') != 1234
-    assert 1234 != f('1234')
+    assert f('1234') != 1234
 
 
 def test_dunder_hash():

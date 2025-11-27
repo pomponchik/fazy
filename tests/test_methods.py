@@ -1,6 +1,7 @@
 import sys
 
 import pytest
+from full_match import match
 
 import f
 
@@ -91,8 +92,8 @@ def test_index():
     # str references
     assert 'kek'.index('k') == 0
     assert 'kek'.index('e') == 1
-    with pytest.raises(ValueError):
-        'kek'.index('p') == -1
+    with pytest.raises(ValueError, match=match('substring not found')):
+        'kek'.index('p')
 
     assert f('kek').index('k') == 0
     assert f('kek').index(f('k')) == 0
@@ -100,11 +101,11 @@ def test_index():
     assert f('kek').index('e') == 1
     assert f('kek').index(f('e')) == 1
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').index('p')
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').index(f('p'))
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match=match('must be str, not int')):
         f('kek').index(0)
 
 
@@ -112,8 +113,8 @@ def test_rindex():
     # str references
     assert 'kek'.rindex('k') == 2
     assert 'kek'.rindex('e') == 1
-    with pytest.raises(ValueError):
-        'kek'.rindex('p') == -1
+    with pytest.raises(ValueError, match=match('substring not found')):
+        'kek'.rindex('p')
 
     assert f('kek').rindex('k') == 2
     assert f('kek').rindex(f('k')) == 2
@@ -121,11 +122,11 @@ def test_rindex():
     assert f('kek').rindex('e') == 1
     assert f('kek').rindex(f('e')) == 1
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').rindex('p')
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').rindex(f('p'))
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match=match('must be str, not int')):
         f('kek').rindex(0)
 
 

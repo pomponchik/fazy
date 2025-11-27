@@ -1,9 +1,9 @@
 import gc
-import sys
 import inspect
+import sys
 from string import Formatter
 from types import CodeType, FrameType
-from typing import Protocol, Iterable, Optional, Union, Sized, Dict, Type, Any
+from typing import Any, Dict, Iterable, Optional, Protocol, Sized, Type, Union
 
 from f.chain_unit import ChainUnit
 from f.lazy_string import LazyString
@@ -27,7 +27,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
             {**base_frame.f_globals},
             self.sum_of_nonlocals(
                 base_frame.f_back,
-                self.get_qualname(base_frame.f_code, code_line=base_frame.f_lineno),
+                self.get_qualname(base_frame.f_code),
                 closures,
             ),
             lazy,
@@ -51,7 +51,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
         while first_frame is not None:
             code = first_frame.f_code
 
-            qualname = self.get_qualname(code, code_line=0)
+            qualname = self.get_qualname(code)
             if qualname is not None:
                 if self.startswith(base_qualname.split('.'), qualname.split('.')):
                     all_locals.append(first_frame.f_locals)
@@ -68,7 +68,7 @@ class ProxyModule(sys.modules[__name__].__class__):  # type: ignore[misc]
         return result
 
     @classmethod
-    def get_qualname(cls: Type['ProxyModule'], code: CodeType, code_line: int) -> Optional[str]:
+    def get_qualname(cls: Type['ProxyModule'], code: CodeType) -> Optional[str]:
         functions = []
 
         for function in gc.get_referrers(code):

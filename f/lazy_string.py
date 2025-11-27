@@ -1,11 +1,11 @@
 from collections import UserString
-from typing import Union, List, Dict, Tuple, Iterable, Callable, Optional, Any
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 from f.chain_unit import ChainUnit
 
 
 class LazyString(UserString, str):  # type: ignore[misc]
-    __slots__ = ('units', 'local_locals', 'local_globals', 'local_nonlocals', 'lazy', 'result')
+    __slots__ = ('lazy', 'local_globals', 'local_locals', 'local_nonlocals', 'result', 'units')
 
     def __init__(self, units: List[ChainUnit], local_locals: Dict[str, Any], local_globals: Dict[str, Any], local_nonlocals: Dict[str, Any], lazy: bool) -> None:
         self.units: List[ChainUnit] = units
@@ -15,7 +15,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
         self.lazy: bool = lazy
         self.result: Optional[str] = None
 
-    def __new__(cls, *args: Any, **kwargs: Any) -> 'LazyString':
+    def __new__(cls, *args: Any, **kwargs: Any) -> 'LazyString':  # noqa: ARG004
         return str.__new__(cls)
 
     def __add__(self, other: Union['LazyString', str]) -> str:
@@ -57,7 +57,7 @@ class LazyString(UserString, str):  # type: ignore[misc]
     def __setattr__(self, name: str, value: Any) -> None:
         if name not in type(self).__slots__:
             raise AttributeError(
-                "'{0}' object has no attribute '{1}'".format(type(self).__name__, name)
+                "'{0}' object has no attribute '{1}'".format(type(self).__name__, name),
             )
         object.__setattr__(self, name, value)
 
@@ -176,8 +176,8 @@ class LazyString(UserString, str):  # type: ignore[misc]
 
         first_item = {}
         for key, value in x.items():
-            key = key.data if isinstance(key, UserString) else key
-            value = value.data if isinstance(value, UserString) else value
+            key = key.data if isinstance(key, UserString) else key  # noqa: PLW2901
+            value = value.data if isinstance(value, UserString) else value  # noqa: PLW2901
             first_item[key] = value
 
         return str.maketrans(first_item, *converted_others)  # type: ignore[arg-type]

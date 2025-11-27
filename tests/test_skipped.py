@@ -1,12 +1,12 @@
 import os
-import sys
 import pickle
-from tempfile import TemporaryDirectory
+import sys
 from string import Formatter
-
-import f
+from tempfile import TemporaryDirectory
 
 import pytest
+
+import f
 
 
 @pytest.mark.skip(reason='It is impossible to do it.')

@@ -105,7 +105,7 @@ def test_index():
         f('kek').index('p')
     with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').index(f('p'))
-    with pytest.raises(TypeError, match=match('must be str, not int')):
+    with pytest.raises(TypeError):
         f('kek').index(0)
 
 

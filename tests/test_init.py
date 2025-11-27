@@ -244,19 +244,19 @@ def test_logging():
 
 
 def test_logging_to_file():
+    print('handlers before', logging.root.handlers)
     file_name = os.path.join('tests', 'data', 'file.log')
-    with open(file_name, 'r') as file:
-        content = file.read()
-        print(repr(content))
-
-
     logging.root.addHandler(logging.FileHandler(file_name))
+
+    print('handlers after adding a handler', logging.root.handlers)
 
     with open(file_name, 'r') as file:
         content = file.read()
         print(repr(content))
 
     logging.error(f('kek'))
+
+    print('handlers after logging', logging.root.handlers)
 
     with open(file_name, 'r') as file:
         content = file.read()

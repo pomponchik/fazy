@@ -250,7 +250,8 @@ def test_logging_to_file():
     print('handlers before', logging.root.handlers)
     with TemporaryDirectory() as path:
         file_name = os.path.join(path, 'file.log')
-        logging.root.addHandler(logging.FileHandler(file_name))
+        handler = logging.FileHandler(file_name)
+        logging.root.addHandler(handler)
 
         print('handlers after adding a handler', logging.root.handlers)
 
@@ -266,6 +267,8 @@ def test_logging_to_file():
             content = file.read()
             print(repr(content))
             assert content == 'kek\n'
+
+        logging.root.handlers.remove(handler)
 
 
 def test_list_comprehension():

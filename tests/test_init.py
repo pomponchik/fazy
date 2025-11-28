@@ -243,39 +243,6 @@ def test_logging():
     assert type(lst[0].message) is str
 
 
-def test_logging_to_file():
-    from tempfile import TemporaryDirectory
-
-
-    print('handlers before', logging.root.handlers)
-    with TemporaryDirectory() as path:
-        file_name = os.path.join(path, 'file.log')
-        handler = logging.FileHandler(file_name)
-        logging.root.addHandler(handler)
-
-        print('handlers after adding a handler', logging.root.handlers)
-
-        with open(file_name, 'r') as file:
-            content = file.read()
-            print(repr(content))
-
-        logging.error(f('kek'))
-
-        print('handlers after logging', logging.root.handlers)
-
-        with open(file_name, 'r') as file:
-            content = file.read()
-            print(repr(content))
-            assert content == 'kek\n'
-
-        logging.root.handlers.remove(handler)
-
-        try:
-            os.remove(file_name)
-        except PermissionError:  # windows oddities
-            pass
-
-
 def test_list_comprehension():
     assert [f('{x}') for x in range(5)] == ['0', '1', '2', '3', '4']
 

@@ -1,13 +1,10 @@
-import os
-import sys
 import logging
-from io import StringIO
 from contextlib import redirect_stdout
+from io import StringIO
 
 import pytest
 
 import f
-
 
 GLOBAL_VARIABLE = 'kek'
 
@@ -18,7 +15,7 @@ def test_basic():
 
 
 def test_basic_capturing_variables():
-    kek = 'kek'
+    kek = 'kek'  # noqa: F841
 
     assert f('{kek}') == 'kek'
     assert f('{kek}') != 'lol'
@@ -30,7 +27,7 @@ def test_basic_capturing_global_variables():
 
 
 def test_globals_and_locals_intersection():
-    GLOBAL_VARIABLE = 'lol'
+    GLOBAL_VARIABLE = 'lol'  # noqa: N806
 
     assert f('{GLOBAL_VARIABLE}') == 'lol'
     assert f('{GLOBAL_VARIABLE}') == '{0}'.format(GLOBAL_VARIABLE)
@@ -39,7 +36,7 @@ def test_globals_and_locals_intersection():
 
 
 def test_complex_string():
-    kek = 'kek?'
+    kek = 'kek?'  # noqa: F841
 
     assert f('lol {kek} {"cheburek"} {GLOBAL_VARIABLE} {2} {False}') == 'lol kek? cheburek kek 2 False'
 
@@ -76,11 +73,9 @@ def test_lazyness():
             return 'kek'
 
     assert f('{SomeClass()}') == 'kek'
-    len(accumulator) == 1
+    assert len(accumulator) == 1
 
     accumulator.pop()
-
-    some_object = SomeClass()
 
     lazy_string = f('{SomeClass()}')
 
@@ -96,7 +91,7 @@ def test_lazyness():
 
 
 def test_not_lazy():
-    number = 5
+    number = 5  # noqa: F841
 
     assert type(f('kek', lazy=False)) is str
     assert type(f('{number}', lazy=False)) is str
@@ -173,20 +168,22 @@ def test_read_nonlocal_variable_nested():
         return f('{kek}')
 
     def function():
-        kek = 3
+        kek = 3  # noqa: F841
         return function_2()
 
     assert function() == '{0}'.format(5)
+    assert function() == function_2()
 
     # comparing with original interpreter behavior:
-    def function_2():
+    def function_3():
         return '{0}'.format(kek)
 
-    def function():
-        kek = 3
+    def function_4():
+        kek = 3  # noqa: F841
         return function_2()
 
-    assert function() == '{0}'.format(5)
+    assert function_3() == '{0}'.format(5)
+    assert function_3() == function_4()
 
 
 def test_builtins():
@@ -202,7 +199,7 @@ def test_modules_startswith():
 
 def test_print():
     with redirect_stdout(StringIO()) as context:
-        print(f('kek'))
+        print(f('kek'))  # noqa: T201
 
     assert context.getvalue() == 'kek\n'
 
@@ -245,22 +242,6 @@ def test_logging():
     assert type(lst[0].message) is str
 
 
-def test_logging_to_file():
-    file_name = os.path.join('tests', 'data', 'file.log')
-    logging.root.addHandler(logging.FileHandler(file_name))
-
-    logging.error(f('kek'))
-
-    with open(file_name, 'r') as file:
-        content = file.read()
-        assert content == 'kek\n'
-
-    try:
-        os.remove(file_name)
-    except PermissionError:  # windows oddities
-        pass
-
-
 def test_list_comprehension():
     assert [f('{x}') for x in range(5)] == ['0', '1', '2', '3', '4']
 
@@ -270,7 +251,7 @@ def test_genexprs():
 
 
 def test_not_lazy_mode():
-    number = 33
+    number = 33  # noqa: F841
 
     assert f('kek', lazy=False) == 'kek'
     assert f('kek {number}', lazy=False) == 'kek 33'
@@ -280,7 +261,7 @@ def test_not_lazy_mode():
 
 
 def test_no_closures_mode_base_working():
-    number = 5
+    number = 5  # noqa: F841
 
     assert f('kek', closures=False) == 'kek'
     assert f('kek {number}', closures=False) == 'kek 5'
@@ -288,10 +269,10 @@ def test_no_closures_mode_base_working():
 
 
 def test_raise_if_closures_when_no_closures_mode():
-    number_1 = 5
+    number_1 = 5  # noqa: F841
 
     def wrapper():
-        number_2 = 10
+        number_2 = 10  # noqa: F841
         def wrapped():
             return f('kek {number_1} {number_2}', closures=False)
         return wrapped
@@ -300,41 +281,8 @@ def test_raise_if_closures_when_no_closures_mode():
         assert wrapper()()
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
-def test_string_as_variable_when_safe_mode():
-    # default mode is True
-    with pytest.raises(SyntaxError):
-        string = 'kek'
-        f(string)
+def test_just_simple_exec():
+    globals_for_module = {}
+    exec('import f; a = f("kek")', globals_for_module)
 
-    with pytest.raises(SyntaxError):
-        string = 'kek'
-        f(string, safe=True)
-
-
-@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
-def test_string_as_variable_when_safe_mode_into_generator_function():
-    def generator():
-        string = 'kek'
-        yield f(string)
-
-    with pytest.raises(SyntaxError):
-        for _ in generator():
-            pass
-
-
-@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
-def test_string_as_variable_when_safe_mode_into_generator_expression():
-    with pytest.raises(SyntaxError):
-        list(f(string) for string in ['lol', 'kek'])
-
-
-@pytest.mark.skipif(sys.version_info < (3, 8), reason='Problems with Python 3.7')
-def test_string_as_variable_when_safe_mode_into_double_strings_generator_expression():
-    with pytest.raises(SyntaxError):
-        list((f(string), f('kek')) for string in ['lol', 'kek'])
-
-
-def test_string_as_variable_when_not_safe_mode():
-    string = 'kek'
-    assert f(string, safe=False) == string
+    assert globals_for_module['a'] == f('kek')

@@ -2,7 +2,7 @@ from typing import Optional
 
 
 class ChainUnit:
-    def __init__(self, base: str, appendix: Optional[str] = None, lazy: bool = True) -> None:
+    def __init__(self, base: str, appendix: Optional[str] = None) -> None:
         self.base = base
         self.appendix = appendix
         if self.appendix is not None:

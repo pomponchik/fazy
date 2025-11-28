@@ -8,3 +8,5 @@ build
 .mypy_cache
 .ruff_cache
 test.py
+.mutmut-cache
+html

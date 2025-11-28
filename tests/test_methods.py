@@ -1,6 +1,7 @@
 import sys
 
 import pytest
+from full_match import match
 
 import f
 
@@ -91,8 +92,8 @@ def test_index():
     # str references
     assert 'kek'.index('k') == 0
     assert 'kek'.index('e') == 1
-    with pytest.raises(ValueError):
-        'kek'.index('p') == -1
+    with pytest.raises(ValueError, match=match('substring not found')):
+        'kek'.index('p')
 
     assert f('kek').index('k') == 0
     assert f('kek').index(f('k')) == 0
@@ -100,9 +101,9 @@ def test_index():
     assert f('kek').index('e') == 1
     assert f('kek').index(f('e')) == 1
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').index('p')
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').index(f('p'))
     with pytest.raises(TypeError):
         f('kek').index(0)
@@ -112,8 +113,8 @@ def test_rindex():
     # str references
     assert 'kek'.rindex('k') == 2
     assert 'kek'.rindex('e') == 1
-    with pytest.raises(ValueError):
-        'kek'.rindex('p') == -1
+    with pytest.raises(ValueError, match=match('substring not found')):
+        'kek'.rindex('p')
 
     assert f('kek').rindex('k') == 2
     assert f('kek').rindex(f('k')) == 2
@@ -121,9 +122,9 @@ def test_rindex():
     assert f('kek').rindex('e') == 1
     assert f('kek').rindex(f('e')) == 1
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').rindex('p')
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=match('substring not found')):
         f('kek').rindex(f('p'))
     with pytest.raises(TypeError):
         f('kek').rindex(0)
@@ -319,6 +320,14 @@ def test_startswith():
     assert f('kek').startswith(f(''))
     assert not f('kek').startswith(f('pe'))
 
+    assert f('kek').startswith(('k', 'e'))
+    assert f('kek').startswith(('',))
+    assert not f('kek').startswith(('p', 'e'))
+
+    assert f('kek').startswith(('k', f('e')))
+    assert f('kek').startswith(('',))
+    assert not f('kek').startswith((f('p'), 'e'))
+
 
 def test_endswith():
     # str references
@@ -333,6 +342,10 @@ def test_endswith():
     assert f('kek').endswith(f('ek'))
     assert f('kek').endswith(f(''))
     assert not f('kek').endswith(f('pe'))
+
+    assert f('kek').endswith((f('e'), f('k')))
+    assert f('kek').endswith((f(''),))
+    assert not f('kek').endswith((f('p'), f('e')))
 
 
 def test_isdigit():
@@ -464,6 +477,10 @@ def test_maketrans():
     assert str.maketrans('mSa', 'eJo', 'odnght') == f('kek').maketrans(f('mSa'), f('eJo'), f('odnght'))
     assert str.maketrans('S', 'P') == f('kek').maketrans('S', 'P')
     assert str.maketrans('S', 'P') == f('kek').maketrans(f('S'), f('P'))
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({'a': 'b', 'r': 't'})
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({f('a'): 'b', f('r'): 't'})
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({'a': f('b'), 'r': f('t')})
+    assert str.maketrans({'a': 'b', 'r': 't'}) == f('kek').maketrans({f('a'): f('b'), f('r'): f('t')})
 
 
 def test_partition():

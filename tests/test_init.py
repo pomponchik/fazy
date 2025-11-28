@@ -244,29 +244,33 @@ def test_logging():
 
 
 def test_logging_to_file():
+    from tempfile import TemporaryDirectory
+
+
     print('handlers before', logging.root.handlers)
-    file_name = os.path.join('tests', 'data', 'file.log')
-    logging.root.addHandler(logging.FileHandler(file_name))
+    with TemporaryDirectory() as path:
+        file_name = os.path.join(path, 'file.log')
+        logging.root.addHandler(logging.FileHandler(file_name))
 
-    print('handlers after adding a handler', logging.root.handlers)
+        print('handlers after adding a handler', logging.root.handlers)
 
-    with open(file_name, 'r') as file:
-        content = file.read()
-        print(repr(content))
+        with open(file_name, 'r') as file:
+            content = file.read()
+            print(repr(content))
 
-    logging.error(f('kek'))
+        logging.error(f('kek'))
 
-    print('handlers after logging', logging.root.handlers)
+        print('handlers after logging', logging.root.handlers)
 
-    with open(file_name, 'r') as file:
-        content = file.read()
-        print(repr(content))
-        assert content == 'kek\n'
+        with open(file_name, 'r') as file:
+            content = file.read()
+            print(repr(content))
+            assert content == 'kek\n'
 
-    try:
-        os.remove(file_name)
-    except PermissionError:  # windows oddities
-        pass
+        try:
+            os.remove(file_name)
+        except PermissionError:  # windows oddities
+            pass
 
 
 def test_list_comprehension():
